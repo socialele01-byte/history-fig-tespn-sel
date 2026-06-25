@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIG-TESPN 融入社會科 教學包 — 入口網站</title>
+<style>
+  :root{
+    --paper:#FBF3E2;--card:#FFFDF8;--ink:#3A2A20;--inkSoft:#86705F;--line:#EAD9BD;
+    --coral:#E25B43;--amber:#F0A03B;--gold:#D9A82E;--green:#5FA463;--teal:#3F9E8E;--sky:#3E8CB5;--deep:#356E9E;--close:#C9743E;
+    --sidebar-w:280px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{background:var(--paper);color:var(--ink);
+    font-family:"PingFang TC","Heiti TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    line-height:1.5;-webkit-font-smoothing:antialiased;overflow:hidden;}
+
+  .shell{display:flex;height:100vh;}
+
+  /* Sidebar */
+  aside{width:var(--sidebar-w);flex:none;background:linear-gradient(180deg,#FFFCF4,#FFF6E6);
+    border-right:2px solid var(--ink);overflow-y:auto;padding:18px 14px 30px;}
+  .brand{padding:4px 6px 14px;border-bottom:2px solid var(--line);margin-bottom:14px;}
+  .eyebrow{font-size:.66rem;letter-spacing:.26em;font-weight:700;color:var(--coral);margin:0 0 6px;text-transform:uppercase;}
+  .brand h1{margin:0;font-size:1.08rem;font-weight:800;line-height:1.35;}
+  .brand small{display:block;font-size:.74rem;font-weight:700;color:var(--inkSoft);margin-top:4px;}
+
+  .grp{margin-top:16px;}
+  .grp h2{display:flex;align-items:center;gap:8px;margin:0 0 8px;font-size:.82rem;font-weight:800;}
+  .grp h2 .b{width:1.4rem;height:1.4rem;border-radius:7px;color:#fff;display:grid;place-items:center;
+    font-family:Georgia,serif;font-weight:700;font-size:.82rem;flex:none;}
+  .grp h2 .sub{font-size:.66rem;color:var(--inkSoft);font-weight:600;margin-left:2px;}
+
+  nav.items{display:flex;flex-direction:column;gap:5px;}
+  .nitem{display:block;width:100%;text-align:left;border:2px solid transparent;border-radius:10px;
+    background:transparent;padding:8px 10px;font-size:.84rem;font-weight:700;color:var(--ink);
+    cursor:pointer;font-family:inherit;line-height:1.4;}
+  .nitem:hover{background:#FFF1DC;border-color:var(--line);}
+  .nitem.active{background:var(--card);border-color:var(--ink);box-shadow:2px 2px 0 var(--line);}
+  .nitem .num{display:inline-block;width:1.4rem;color:var(--coral);font-family:Georgia,serif;}
+  .nitem .desc{display:block;font-size:.72rem;font-weight:600;color:var(--inkSoft);margin-top:1px;margin-left:1.4rem;}
+
+  .pptxnote{margin-top:18px;border:2px dashed var(--close);border-radius:11px;background:#FFF7EC;padding:10px 12px;font-size:.74rem;color:var(--inkSoft);}
+  .pptxnote b{color:var(--close);display:block;font-size:.78rem;margin-bottom:3px;}
+  .pptxnote a{display:block;color:var(--sky);font-weight:700;text-decoration:none;margin-top:4px;}
+  .pptxnote a::before{content:"↗ ";}
+
+  /* Main content */
+  main{flex:1;position:relative;overflow:hidden;background:var(--paper);}
+  .frame-wrap{position:absolute;inset:0;}
+  iframe{width:100%;height:100%;border:none;background:#fff;}
+
+  .topbar{position:absolute;top:0;left:0;right:0;height:0;}
+
+  @media (max-width:780px){
+    :root{--sidebar-w:100%;}
+    .shell{flex-direction:column;}
+    aside{width:100%;height:auto;max-height:42vh;border-right:none;border-bottom:2px solid var(--ink);}
+    main{flex:1;}
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <aside>
+    <div class="brand">
+      <p class="eyebrow">教學包總覽 · 入口網站</p>
+      <h1>FIG-TESPN 融入社會科<small>社會情緒學習 (SEL) × 五年級社會科</small></h1>
+    </div>
+
+    <div class="grp">
+      <h2><span class="b" style="background:var(--amber)">·</span>總覽</h2>
+      <nav class="items">
+        <button class="nitem active" data-src="00_教學包總覽_先讀我.html" data-default>
+          <span class="num">⌂</span>教學包總覽<span class="desc">先讀我：用途與使用情境索引</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="grp">
+      <h2><span class="b" style="background:var(--green)">A</span>課堂教具<span class="sub">瀏覽器開、可列印</span></h2>
+      <nav class="items">
+        <button class="nitem" data-src="FIG-TESPN社會科思考鷹架.html">
+          <span class="num">①</span>多案例思考鷹架<span class="desc">四案例切換、填寫、參考答案</span>
+        </button>
+        <button class="nitem" data-src="FIG-TESPN社會科_V2_莫那魯道骰子抉擇.html">
+          <span class="num">②</span>骰子抉擇遊戲（V2）<span class="desc">五關卡互動：選路→擲骰→揭曉→反思</span>
+        </button>
+        <button class="nitem" data-src="FIG-TESPN社會科_V2_教師引導提問單.html">
+          <span class="num">③</span>教師引導提問單<span class="desc">逐關追問句、收尾統整四步驟</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="grp">
+      <h2><span class="b" style="background:var(--sky)">C</span>講者輔助<span class="sub">上台順稿、控時</span></h2>
+      <nav class="items">
+        <button class="nitem" data-src="FIG-TESPN社會科_工作坊講稿_8頁精簡版.html">
+          <span class="num">⑦</span>工作坊講稿<span class="desc">逐頁口語引言、停頓與語速提示</span>
+        </button>
+        <button class="nitem" data-src="FIG-TESPN社會科_工作坊流程小抄.html">
+          <span class="num">⑧</span>工作坊流程小抄<span class="desc">報時表、檢查點、時長伸縮對照</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="pptxnote">
+      <b>工作坊簡報（PPTX）</b>
+      未收錄於本網站，請直接開啟原始檔案：
+      <a href="FIG-TESPN社會科教學包_工作坊簡報.pptx" target="_blank">完整版（13 頁）</a>
+      <a href="FIG-TESPN社會科教學包_工作坊簡報_8頁精簡版.pptx" target="_blank">精簡版（8 頁）</a>
+      <a href="FIG-TESPN社會科教學包_工作坊簡報_8頁精簡版_含講者備註.pptx" target="_blank">精簡版・含講者備註</a>
+    </div>
+  </aside>
+
+  <main>
+    <div class="frame-wrap">
+      <iframe id="content" src="00_教學包總覽_先讀我.html" title="教學包內容"></iframe>
+    </div>
+  </main>
+
+</div>
+
+<script>
+  const frame = document.getElementById('content');
+  const items = document.querySelectorAll('.nitem');
+  items.forEach(btn => {
+    btn.addEventListener('click', () => {
+      items.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      frame.src = btn.dataset.src;
+    });
+  });
+</script>
+</body>
+</html>

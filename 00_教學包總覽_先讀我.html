@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教學包總覽 — FIG-TESPN 融入社會科</title>
+<style>
+  :root{
+    --paper:#FBF3E2;--card:#FFFDF8;--ink:#3A2A20;--inkSoft:#86705F;--line:#EAD9BD;
+    --coral:#E25B43;--amber:#F0A03B;--gold:#D9A82E;--green:#5FA463;--teal:#3F9E8E;--sky:#3E8CB5;--deep:#356E9E;--close:#C9743E;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--paper);color:var(--ink);
+    font-family:"PingFang TC","Heiti TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:900px;margin:0 auto;padding:26px 22px 60px;}
+
+  /* header */
+  header.hd{position:relative;border:2px solid var(--ink);border-radius:18px;overflow:hidden;
+    background:linear-gradient(180deg,#FFFCF4,#FFF6E6);padding:22px 26px 20px;}
+  header.hd::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(circle at 92% -25%,rgba(240,160,59,.22),transparent 42%),
+               radial-gradient(circle at 3% 130%,rgba(95,164,99,.16),transparent 46%);}
+  .eyebrow{font-size:.74rem;letter-spacing:.3em;font-weight:700;color:var(--coral);margin:0 0 8px;text-transform:uppercase;}
+  h1{margin:0;font-size:1.7rem;font-weight:800;}
+  h1 small{display:block;font-size:.92rem;font-weight:700;color:var(--inkSoft);margin-top:6px;}
+  .intro{margin:12px 0 0;font-size:.92rem;color:var(--ink);max-width:64ch;}
+  .source{margin:8px 0 0;font-size:.8rem;color:var(--inkSoft);}
+
+  h2.sec{font-size:1.05rem;margin:26px 0 4px;display:flex;align-items:center;gap:10px;}
+  h2.sec .b{width:1.7rem;height:1.7rem;border-radius:9px;color:#fff;display:grid;place-items:center;font-family:Georgia,serif;font-weight:700;font-size:1rem;}
+  h2.sec .sub{font-size:.78rem;color:var(--inkSoft);font-weight:600;}
+
+  /* scenario quick guide */
+  .scen{margin-top:14px;border:2px dashed var(--close);border-radius:14px;background:#FFF7EC;padding:14px 18px;}
+  .scen h3{margin:0 0 10px;font-size:1rem;color:var(--close);}
+  .srow{display:flex;gap:12px;align-items:flex-start;padding:7px 0;border-top:1px solid var(--line);}
+  .srow:first-of-type{border-top:none;}
+  .stag{flex:none;width:8.5rem;font-weight:800;font-size:.86rem;}
+  .stag .ic{margin-right:5px;}
+  .spath{font-size:.86rem;}
+  .spath b{color:var(--coral);}
+
+  /* file cards */
+  .file{border:2px solid var(--ink);border-radius:13px;background:var(--card);padding:13px 16px;margin-top:11px;}
+  .ftop{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+  .fname{font-weight:800;font-size:1.02rem;}
+  .fmt{font-family:Georgia,serif;font-size:.7rem;font-weight:700;color:#fff;border-radius:5px;padding:1px 7px;letter-spacing:.04em;}
+  .fmt.html{background:var(--teal);} .fmt.pptx{background:var(--coral);}
+  .fpath{font-size:.74rem;color:var(--inkSoft);font-family:ui-monospace,monospace;margin-top:2px;word-break:break-all;}
+  .frow{display:grid;grid-template-columns:5.5rem 1fr;gap:6px 10px;margin-top:8px;font-size:.88rem;}
+  .frow .k{font-weight:800;color:var(--close);}
+  .open{display:inline-block;margin-top:8px;font-size:.8rem;font-weight:700;color:var(--sky);text-decoration:none;}
+  .open::before{content:"↗ ";}
+
+  /* rationale */
+  .why{margin-top:24px;border:2px solid var(--ink);border-radius:14px;background:#FBF6EC;padding:14px 18px;}
+  .why h3{margin:0 0 6px;font-size:1rem;}
+  .why p{margin:4px 0;font-size:.88rem;}
+  .why b{color:var(--coral);}
+
+  footer.ft{margin-top:22px;font-size:.78rem;color:var(--inkSoft);text-align:center;line-height:1.9;}
+  footer.ft b{color:var(--coral);}
+
+  @media print{
+    body{background:#fff;}
+    .wrap{padding:0;max-width:100%;}
+    .file,.scen,.why,header.hd{break-inside:avoid;}
+    .open{display:none;}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hd">
+    <p class="eyebrow">教學包總覽 · 交接索引</p>
+    <h1>FIG-TESPN 融入社會科 教學包
+      <small>社會情緒學習 (SEL) × 五年級社會科　｜　共 8 份檔案</small>
+    </h1>
+    <p class="intro">
+      這是一整套「把社會情緒學習融進社會課」的現成資源。核心是 <b>FIG-TESPN</b> 八步驟思考法——
+      帶學生站進歷史人物做決定的那一刻，讀懂情緒、權衡選擇、預想後果，最後做出負責任的決定。
+      本頁說明每份檔案的<strong>用途</strong>與<strong>使用時機</strong>，方便日後查找或交接。
+    </p>
+    <p class="source">設計緣起：黃永和教授「社會情緒學習」研習　+　五年級社會科公開課議課　｜　暖陽色系・繁體中文</p>
+  </header>
+
+  <!-- Scenario quick guide -->
+  <div class="scen">
+    <h3>先看這裡：三種情境，該拿哪幾份？</h3>
+    <div class="srow">
+      <div class="stag"><span class="ic">🎒</span>我要上一堂課</div>
+      <div class="spath"><b>① 骰子遊戲</b>暖身體驗 → <b>② 多案例鷹架</b>分析歷史 → <b>③ 教師提問單</b>帶討論（教具三件套）</div>
+    </div>
+    <div class="srow">
+      <div class="stag"><span class="ic">🎤</span>我要在研習分享</div>
+      <div class="spath"><b>⑥ 精簡版含講者備註</b>（投影）+ <b>⑧ 流程小抄</b>（控時）+ <b>⑦ 講稿</b>（順稿），時間長就改用 <b>④ 完整版</b></div>
+    </div>
+    <div class="srow">
+      <div class="stag"><span class="ic">🤝</span>我要交接 / 初次了解</div>
+      <div class="spath">先讀<b>本頁總覽</b> → 看一遍 <b>④ 完整版簡報</b>掌握全貌 → 再打開三件教具實際操作一次</div>
+    </div>
+  </div>
+
+  <!-- A. 課堂教具 -->
+  <h2 class="sec"><span class="b" style="background:var(--green)">A</span>課堂教具 <span class="sub">直接上課、發給學生用（HTML，瀏覽器開啟，可離線、可列印）</span></h2>
+
+  <div class="file">
+    <div class="ftop"><span class="fname">① 多案例思考鷹架</span><span class="fmt html">HTML</span></div>
+    <div class="fpath">FIG-TESPN社會科思考鷹架.html</div>
+    <div class="frow">
+      <span class="k">用途</span><span>一張鷹架走遍所有歷史抉擇。內建四案例（莫那魯道、秦始皇、蔣渭水、日治警察），可切換、可填寫、附參考思考。</span>
+      <span class="k">使用時機</span><span>課堂分析階段；學生個人或分組填寫。列印時自動隱藏參考答案，即成乾淨學習單。</span>
+    </div>
+    <a class="open" href="FIG-TESPN社會科思考鷹架.html">開啟檔案</a>
+  </div>
+
+  <div class="file">
+    <div class="ftop"><span class="fname">② 骰子抉擇遊戲（V2・莫那魯道）</span><span class="fmt html">HTML</span></div>
+    <div class="fpath">FIG-TESPN社會科_V2_莫那魯道骰子抉擇.html</div>
+    <div class="frow">
+      <span class="k">用途</span><span>把霧社事件做成五關卡互動遊戲：選一條路 → 擲骰看後果 → 歷史揭曉 → 反思。骰子＝無法掌控的情勢變數。</span>
+      <span class="k">使用時機</span><span>課堂暖身／導入，製造張力與共感；之後再接鷹架做深入分析。</span>
+    </div>
+    <a class="open" href="FIG-TESPN社會科_V2_莫那魯道骰子抉擇.html">開啟檔案</a>
+  </div>
+
+  <div class="file">
+    <div class="ftop"><span class="fname">③ 教師引導提問單</span><span class="fmt html">HTML</span></div>
+    <div class="fpath">FIG-TESPN社會科_V2_教師引導提問單.html</div>
+    <div class="frow">
+      <span class="k">用途</span><span>對應骰子遊戲的逐關提問：每條路（A/B/C）都有專屬追問，◆必問○彈性，附收尾統整四步驟。</span>
+      <span class="k">使用時機</span><span>老師備課與帶討論時手持參考；是讓遊戲「長出深度」的關鍵。</span>
+    </div>
+    <a class="open" href="FIG-TESPN社會科_V2_教師引導提問單.html">開啟檔案</a>
+  </div>
+
+  <!-- B. 工作坊簡報 -->
+  <h2 class="sec"><span class="b" style="background:var(--coral)">B</span>工作坊簡報 <span class="sub">對外分享、研習用（PowerPoint，可自由編輯）</span></h2>
+
+  <div class="file">
+    <div class="ftop"><span class="fname">④ 完整版簡報（13 頁）</span><span class="fmt pptx">PPTX</span></div>
+    <div class="fpath">FIG-TESPN社會科教學包_工作坊簡報.pptx</div>
+    <div class="frow">
+      <span class="k">用途</span><span>完整介紹理念、FIG-TESPN、SEL 對照、三件教具、霧社示範、可遷移性。內容最齊全。</span>
+      <span class="k">使用時機</span><span>時間充裕的研習（約 25–30 分鐘以上）；或新輔導員想一次掌握全貌。</span>
+    </div>
+    <a class="open" href="FIG-TESPN社會科教學包_工作坊簡報.pptx">開啟檔案</a>
+  </div>
+
+  <div class="file">
+    <div class="ftop"><span class="fname">⑤ 精簡版簡報（8 頁）</span><span class="fmt pptx">PPTX</span></div>
+    <div class="fpath">FIG-TESPN社會科教學包_工作坊簡報_8頁精簡版.pptx</div>
+    <div class="frow">
+      <span class="k">用途</span><span>完整版濃縮成 8 頁，保留敘事弧線，約 15 分鐘可講完。版面乾淨無備註。</span>
+      <span class="k">使用時機</span><span>時間有限的分享；想自己重寫備註、或只要乾淨投影檔時用這份。</span>
+    </div>
+    <a class="open" href="FIG-TESPN社會科教學包_工作坊簡報_8頁精簡版.pptx">開啟檔案</a>
+  </div>
+
+  <div class="file">
+    <div class="ftop"><span class="fname">⑥ 精簡版簡報・含講者備註</span><span class="fmt pptx">PPTX</span></div>
+    <div class="fpath">FIG-TESPN社會科教學包_工作坊簡報_8頁精簡版_含講者備註.pptx</div>
+    <div class="frow">
+      <span class="k">用途</span><span>與⑤同頁面，但每頁嵌入口語講稿。用簡報者檢視模式 (Presenter View) 時，旁邊直接顯示要說的話。</span>
+      <span class="k">使用時機</span><span>實際上台主講時的首選——不必另外拿稿。</span>
+    </div>
+    <a class="open" href="FIG-TESPN社會科教學包_工作坊簡報_8頁精簡版_含講者備註.pptx">開啟檔案</a>
+  </div>
+
+  <!-- C. 講者輔助 -->
+  <h2 class="sec"><span class="b" style="background:var(--sky)">C</span>講者輔助 <span class="sub">上台順稿、控時用（HTML，可列印／手機看）</span></h2>
+
+  <div class="file">
+    <div class="ftop"><span class="fname">⑦ 工作坊講稿（對應 8 頁）</span><span class="fmt html">HTML</span></div>
+    <div class="fpath">FIG-TESPN社會科_工作坊講稿_8頁精簡版.html</div>
+    <div class="frow">
+      <span class="k">用途</span><span>逐頁 1–2 句口語引言，標記停頓點與語速提示，融入真實課堂故事，不照唸投影片。</span>
+      <span class="k">使用時機</span><span>備稿與練習；不用 Presenter View 時，印出來放講台或手機看。</span>
+    </div>
+    <a class="open" href="FIG-TESPN社會科_工作坊講稿_8頁精簡版.html">開啟檔案</a>
+  </div>
+
+  <div class="file">
+    <div class="ftop"><span class="fname">⑧ 工作坊流程小抄（時間掌控）</span><span class="fmt html">HTML</span></div>
+    <div class="fpath">FIG-TESPN社會科_工作坊流程小抄.html</div>
+    <div class="frow">
+      <span class="k">用途</span><span>一頁式報時表：累計時刻、檢查點（16 分進體驗、33 分進問答）、落後止血清單、30/40/60 分伸縮對照。</span>
+      <span class="k">使用時機</span><span>上台時放在手邊瞄一眼對錶，控制節奏不超時。</span>
+    </div>
+    <a class="open" href="FIG-TESPN社會科_工作坊流程小抄.html">開啟檔案</a>
+  </div>
+
+  <!-- Why -->
+  <div class="why">
+    <h3>核心理念（給接手的人）</h3>
+    <p>· <b>不另開一門課</b>：社會情緒學習不該獨立設科，而要融入學科——SEL 五面向其實就是「中心德目」。</p>
+    <p>· <b>一套工具走天下</b>：FIG-TESPN 八步驟（情緒→問題→目標→方法→後果→選擇→計畫→檢視），社會科、國語繪本、班級經營都適用。</p>
+    <p>· <b>教思考，不教標準答案</b>：負責任的決定，看的是「想清楚的過程」，不是「運氣的好壞」。處理霧社事件等沉重歷史時，務必帶著尊重，重在理解處境而非評斷對錯。</p>
+  </div>
+
+  <footer class="ft">
+    建議保存方式：<b>八份檔案放在同一個資料夾</b>，本頁即可直接點開各檔（連結用相對路徑）。<br>
+    FIG-TESPN 融入社會科 教學包 · 總覽索引
+  </footer>
+
+</div>
+</body>
+</html>

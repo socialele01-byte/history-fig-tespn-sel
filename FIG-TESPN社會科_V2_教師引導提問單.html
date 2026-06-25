@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教師引導提問單 — 莫那魯道骰子抉擇（V2）</title>
+<style>
+  :root{
+    --paper:#FBF3E2; --card:#FFFDF8; --ink:#3A2A20; --ink-soft:#86705F; --line:#EAD9BD;
+    --coral:#E25B43; --amber:#F0A03B; --gold:#E4BC3C; --green:#5FA463; --teal:#3F9E8E;
+    --sky:#3E8CB5; --deep:#356E9E; --close:#C9743E;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);color:var(--ink);
+    font-family:"PingFang TC","Heiti TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    line-height:1.65;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:26px 20px 70px;}
+
+  /* Header */
+  header.hd{
+    position:relative;border:2px solid var(--ink);border-radius:18px;overflow:hidden;
+    background:linear-gradient(180deg,#FFFCF4 0%,#FFF6E6 100%);padding:24px 26px 20px;
+  }
+  header.hd::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(circle at 90% -15%,rgba(240,160,59,.22),transparent 44%),
+               radial-gradient(circle at 4% 125%,rgba(95,164,99,.16),transparent 46%);}
+  .verbadge{position:absolute;top:18px;right:20px;background:var(--green);color:#fff;font-weight:800;font-size:.72rem;letter-spacing:.12em;border-radius:999px;padding:4px 13px;}
+  .eyebrow{font-size:.76rem;letter-spacing:.3em;font-weight:700;color:var(--coral);margin:0 0 8px;text-transform:uppercase;}
+  h1.title{margin:0;font-size:1.85rem;font-weight:800;line-height:1.25;}
+  h1.title small{display:block;font-size:.98rem;font-weight:700;color:var(--ink-soft);margin-top:6px;letter-spacing:.03em;}
+  .credit{margin:11px 0 0;font-size:.8rem;color:var(--ink-soft);}
+
+  /* Intro */
+  .intro{margin-top:16px;border:2px dashed var(--close);border-radius:14px;background:#FFF7EC;padding:16px 18px;}
+  .intro h2{margin:0 0 8px;font-size:1rem;color:var(--close);}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:.86rem;font-weight:700;margin:0 0 10px;}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .mk{font-family:Georgia,serif;font-weight:700;}
+  .mk.must{color:var(--coral);} .mk.opt{color:var(--sky);}
+  .intro ul{margin:6px 0 0;padding-left:20px;font-size:.88rem;}
+  .intro li{margin:3px 0;}
+
+  /* Stage block */
+  .stage{margin-top:22px;border:2px solid var(--ink);border-radius:16px;background:var(--card);overflow:hidden;}
+  .sbar{padding:12px 18px;color:#fff;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  .sbar .num{font-family:Georgia,serif;font-weight:700;font-size:1.4rem;line-height:1;}
+  .sbar h2{margin:0;font-size:1.2rem;font-weight:800;}
+  .sbar .fg{font-family:Georgia,serif;font-size:.78rem;letter-spacing:.14em;opacity:.92;}
+  .sbar .sel{margin-left:auto;font-size:.72rem;font-weight:800;background:rgba(255,255,255,.25);border-radius:999px;padding:3px 11px;letter-spacing:.04em;}
+  .s1 .sbar{background:var(--coral);} .s2 .sbar{background:var(--gold);color:var(--ink);}
+  .s2 .sbar .sel{background:rgba(58,42,32,.16);}
+  .s3 .sbar{background:var(--teal);} .s4 .sbar{background:var(--deep);}
+  .sbody{padding:14px 18px 18px;}
+
+  ul.q{list-style:none;margin:0;padding:0;}
+  ul.q li{position:relative;padding:5px 0 5px 26px;font-size:.95rem;}
+  ul.q li::before{position:absolute;left:0;top:5px;font-family:Georgia,serif;font-weight:700;}
+  ul.q li.must::before{content:"◆";color:var(--coral);}
+  ul.q li.opt::before{content:"○";color:var(--sky);}
+  ul.q li.must{font-weight:600;}
+  .note{font-size:.85rem;color:var(--ink-soft);background:#FBF1DE;border-radius:8px;padding:8px 12px;margin-top:10px;}
+  .note b{color:var(--close);}
+
+  /* Path cards in stage 3 */
+  .pathblk{border:2px solid var(--ink);border-radius:12px;overflow:hidden;margin-top:12px;display:flex;}
+  .pathblk .stripe{width:12px;flex:none;}
+  .pathblk .pbody{padding:11px 15px;flex:1;}
+  .pathblk h3{margin:0 0 2px;font-size:1rem;}
+  .pathblk .res{font-size:.8rem;color:var(--ink-soft);margin:0 0 8px;}
+  .pA .stripe{background:var(--amber);} .pB .stripe{background:var(--sky);} .pC .stripe{background:var(--coral);}
+
+  .dicebox{margin-top:14px;border:2px solid var(--teal);border-radius:12px;background:#EAF5F2;padding:13px 16px;}
+  .dicebox h3{margin:0 0 6px;font-size:1rem;color:#2C6157;display:flex;align-items:center;gap:8px;}
+  .dicebox ul.q li.must::before{color:#2C6157;}
+
+  /* Closing */
+  .closing{margin-top:22px;border:2px solid var(--ink);border-radius:16px;overflow:hidden;background:var(--card);}
+  .closing .ch{background:var(--close);color:#fff;padding:13px 18px;font-weight:800;font-size:1.2rem;}
+  .closing .cb{padding:6px 18px 18px;}
+  .part{padding:12px 0;border-bottom:1px solid var(--line);}
+  .part:last-child{border-bottom:none;}
+  .part h3{margin:0 0 6px;font-size:1.02rem;}
+  .part h3 .n{display:inline-grid;place-items:center;width:24px;height:24px;background:var(--close);color:#fff;border-radius:7px;font-size:.85rem;font-weight:800;margin-right:8px;font-family:Georgia,serif;}
+  .oneliner{background:#FFF4E6;border:1.5px dashed var(--close);border-radius:10px;padding:10px 14px;font-size:.95rem;margin-top:6px;}
+  .oneliner b{color:var(--close);}
+  .closer{margin-top:14px;font-size:.95rem;background:#FBF6EC;border-left:5px solid var(--coral);border-radius:0 10px 10px 0;padding:12px 16px;}
+  .closer b{color:var(--coral);}
+
+  /* SEL footer */
+  table.sel{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:22px;}
+  table.sel caption{text-align:left;font-weight:800;font-size:.95rem;margin-bottom:8px;color:var(--ink);}
+  table.sel th,table.sel td{border:1px solid var(--line);padding:7px 10px;text-align:left;}
+  table.sel th{background:#FBEAD0;width:32%;font-weight:800;}
+
+  footer.ft{margin-top:24px;font-size:.78rem;color:var(--ink-soft);text-align:center;line-height:1.8;}
+  footer.ft b{color:var(--coral);}
+
+  @media (max-width:600px){
+    h1.title{font-size:1.5rem;}
+    .verbadge{position:static;display:inline-block;margin-bottom:8px;}
+    .sbar .sel{margin-left:0;}
+  }
+  @media print{
+    body{background:#fff;}
+    .stage,.closing,.pathblk,.dicebox,.part,table.sel{break-inside:avoid;}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hd">
+    <span class="verbadge">教師端</span>
+    <p class="eyebrow">教師引導提問單</p>
+    <h1 class="title">帶著問題走進抉擇現場
+      <small>對應 V2・莫那魯道骰子抉擇遊戲 ｜ 霧社事件・1930</small>
+    </h1>
+    <p class="credit">每一關卡的核心提問與追問，加上收尾統整——讓骰子遊戲長出討論的深度。</p>
+  </header>
+
+  <section class="intro">
+    <h2>怎麼用這張單子</h2>
+    <div class="legend">
+      <span><span class="mk must">◆</span> 必問（建議全班共讀）</span>
+      <span><span class="mk opt">○</span> 彈性追問（看時間與討論熱度）</span>
+    </div>
+    <ul>
+      <li>提問順序：<b>先問感受 → 再問理由 → 最後問選擇</b>，呼應 FIG-TESPN 的思考脈絡。</li>
+      <li>多問「為什麼？」「你怎麼知道？」「還有沒有別的可能？」，少給標準答案。</li>
+      <li>接受多元觀點。學生說得有理由，就值得肯定——重點是<b>能說清楚思路</b>，不是答對。</li>
+      <li>全程以尊重對待這段歷史：我們是在<b>理解處境與選擇</b>，不是評斷對錯、更不是比輸贏。</li>
+    </ul>
+  </section>
+
+  <!-- Stage 1 -->
+  <section class="stage s1">
+    <div class="sbar"><span class="num">1</span><h2>讀懂處境</h2><span class="fg">F · I · G</span><span class="sel">SEL・自我覺察＋社會覺察</span></div>
+    <div class="sbody">
+      <ul class="q">
+        <li class="must">如果你是當時的賽德克族人，你會有什麼感受？（先讓學生說出情緒詞）</li>
+        <li class="must">莫那魯道面對的「真正問題」是什麼？不只是某一件事，是什麼讓他這麼為難？</li>
+        <li class="must">他最想守護的是什麼？（這就是他的「目標」）</li>
+        <li class="opt">課文或影片裡，哪些線索讓你這樣判斷？（回到文本找證據）</li>
+        <li class="opt">同樣的處境，族裡的老人和年輕人，感受會一樣嗎？（多角度）</li>
+        <li class="opt">「尊嚴」對一個人、一個族群來說，為什麼這麼重要？</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Stage 2 -->
+  <section class="stage s2">
+    <div class="sbar"><span class="num">2</span><h2>做出抉擇（擲骰前）</h2><span class="fg">T · S</span><span class="sel">SEL・自我管理</span></div>
+    <div class="sbody">
+      <ul class="q">
+        <li class="must">先別急著擲骰——他至少有哪三條路可以走？</li>
+        <li class="must">你選了哪一條？選之前，你心裡在「權衡」什麼？</li>
+        <li class="must">三條路重視的價值不同：A 重視眼前安全、B 重視不流血的改變、C 重視族人尊嚴。你最在意哪一個？</li>
+        <li class="opt">有沒有第四條路，是遊戲沒列出來的？（鼓勵發散）</li>
+        <li class="opt">為什麼「先想清楚再決定」很重要？如果不想就衝動行事，可能會怎樣？</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Stage 3 -->
+  <section class="stage s3">
+    <div class="sbar"><span class="num">3</span><h2>擲骰看後果・每條路的追問</h2><span class="fg">E</span><span class="sel">SEL・負責任的決定</span></div>
+    <div class="sbody">
+
+      <div class="pathblk pA">
+        <span class="stripe"></span>
+        <div class="pbody">
+          <h3>路 A・忍耐配合</h3>
+          <p class="res">遊戲後果：表面平靜，傷口仍在／安穩之下，疑問漸生</p>
+          <ul class="q">
+            <li class="must">表面上沒有衝突了，但「沒有衝突」就等於「問題解決了」嗎？</li>
+            <li class="must">如果尊嚴持續被踐踏，這種「平安」可以維持多久？</li>
+            <li class="opt">忍耐有沒有可能是一種智慧？什麼時候忍耐是對的、什麼時候不是？</li>
+            <li class="opt">你有沒有為了避免麻煩而忍下來的經驗？後來怎麼了？</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pathblk pB">
+        <span class="stripe"></span>
+        <div class="pbody">
+          <h3>路 B・和平陳情</h3>
+          <p class="res">遊戲後果：石沉大海／表面回應／一點改善換來更緊的監視</p>
+          <ul class="q">
+            <li class="must">和平溝通是最理想的方式，但為什麼這條路常常「沒有用」？問題出在誰身上？</li>
+            <li class="must">當你已經很努力溝通，卻得不到回應，你會怎麼想、怎麼做？</li>
+            <li class="opt">和平的方法要成功，需要哪些條件？（例如：對方願意聽、有公平的管道）</li>
+            <li class="opt">蔣渭水也走和平這條路，為什麼有人成功、有人失敗？差別在哪？（可連結 V1 延伸案例）</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pathblk pC">
+        <span class="stripe"></span>
+        <div class="pbody">
+          <h3>路 C・武裝起義</h3>
+          <p class="res">遊戲後果：消息走漏／旋即遭鎮壓／力量懸殊仍奮力一搏</p>
+          <ul class="q">
+            <li class="must">莫那魯道幾乎知道自己會失敗，為什麼還是選擇反抗？（理解：有些價值比輸贏更重要）</li>
+            <li class="must">「失敗的反抗」有沒有意義？意義是什麼？</li>
+            <li class="must">反抗付出了極大的代價，這個代價值得嗎？（沒有標準答案，重點在說出理由）</li>
+            <li class="opt">如果骰子讓你擲出不同結果，你對這個選擇的看法會改變嗎？</li>
+          </ul>
+          <p class="note"><b>帶法提醒：</b>這條路觸及真實的傷亡，請引導學生帶著尊重討論。重點放在「理解他為何這樣選」，不導向歌頌或譴責。</p>
+        </div>
+      </div>
+
+      <div class="dicebox">
+        <h3>🎲 關於「骰子」的關鍵追問（跨三條路）</h3>
+        <ul class="q">
+          <li class="must">為什麼遊戲要用骰子？真實人生做決定時，我們能完全控制結果嗎？</li>
+          <li class="must">既然結果無法完全掌控，那做決定時我們<b>真正能掌握的是什麼</b>？</li>
+        </ul>
+        <p class="note"><b>導向重點：</b>我們能掌握的是——把每個選擇的後果想清楚、確認自己的目標與價值。
+        這就是<b>負責任的決定</b>：它看的是「思考的過程」，不是「運氣好不好」。</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Stage 4 -->
+  <section class="stage s4">
+    <div class="sbar"><span class="num">4</span><h2>歷史揭曉</h2><span class="fg">N</span><span class="sel">SEL・社會覺察＋檢視結果</span></div>
+    <div class="sbody">
+      <ul class="q">
+        <li class="must">知道莫那魯道真正的選擇和結果後，你的心情是什麼？</li>
+        <li class="must">為什麼這段「沉重又看似失敗」的歷史，到今天還被人們記得？</li>
+        <li class="opt">歷史結果已經發生了，我們現在回頭「檢視」它，能學到什麼帶往未來？</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Closing -->
+  <section class="closing">
+    <div class="ch">收尾統整：從歷史回到自己</div>
+    <div class="cb">
+
+      <div class="part">
+        <h3><span class="n">壹</span>歷史 ↔ 我</h3>
+        <ul class="q">
+          <li class="must">你和莫那魯道最大的不同是什麼？（處境？選擇？想法？）</li>
+          <li class="must">如果是你站在那個位置，你會選哪一條路？為什麼？</li>
+        </ul>
+      </div>
+
+      <div class="part">
+        <h3><span class="n">貳</span>把方法帶走</h3>
+        <ul class="q">
+          <li class="must">我們今天用的這套思考法——讀懂感受與問題、確認目標、想出選擇、預想後果、再做決定——除了用在歷史，還能用在哪裡？</li>
+          <li class="opt">（老師示範）拿一個生活情境（和同學吵架、班級要做決定），帶全班快速跑一次 FIG-TESPN。</li>
+        </ul>
+      </div>
+
+      <div class="part">
+        <h3><span class="n">參</span>連結現實</h3>
+        <ul class="q">
+          <li class="must">現在的世界也有很多「面對反對者怎麼選擇」的處境（不同政黨、國際衝突）。當人們做選擇時，他們在權衡什麼？</li>
+        </ul>
+        <p class="note"><b>提醒：</b>理解不等於認同。我們練習的是「看懂別人的處境與選擇」——這就是社會覺察。</p>
+      </div>
+
+      <div class="part">
+        <h3><span class="n">肆</span>一句話總結</h3>
+        <p class="oneliner">請每位學生寫下：「做一個<b>負責任的決定</b>，最重要的是 ＿＿＿＿＿＿。」</p>
+      </div>
+
+      <div class="closer">
+        <b>老師結語可這樣收：</b>負責任的決定，不是保證會有好結果，而是——在想清楚之後，<b>願意為自己的選擇負責</b>。
+      </div>
+    </div>
+  </section>
+
+  <!-- SEL mapping -->
+  <table class="sel">
+    <caption>一眼看懂：每個關卡培養哪個 SEL 面向</caption>
+    <tr><th>關卡</th><td>對應的 SEL 面向</td></tr>
+    <tr><th>① 讀懂處境（FIG）</th><td>自我覺察 Self-Awareness、社會覺察 Social Awareness</td></tr>
+    <tr><th>② 做出抉擇（T·S）</th><td>自我管理 Self-Management（停下來想、不衝動）</td></tr>
+    <tr><th>③ 擲骰看後果（E）</th><td>負責任的決定 Responsible Decision-Making</td></tr>
+    <tr><th>④ 歷史揭曉（N）</th><td>社會覺察 Social Awareness</td></tr>
+    <tr><th>全程討論與分享</th><td>人際關係技巧 Relationship Skills</td></tr>
+  </table>
+
+  <footer class="ft">
+    <b>FIG-TESPN</b>　讀懂處境 → 做出抉擇 → 預想後果 → 檢視結果 → 負責任的決定<br>
+    教師引導提問單 ｜ 搭配 V2 骰子抉擇遊戲與 V1 多案例思考鷹架使用
+  </footer>
+
+</div>
+</body>
+</html>

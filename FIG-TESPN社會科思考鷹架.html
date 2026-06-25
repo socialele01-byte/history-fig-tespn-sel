@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歷史抉擇現場 — FIG-TESPN 社會科思考鷹架</title>
+<style>
+  :root{
+    --paper:#FBF3E2;
+    --card:#FFFDF8;
+    --ink:#3A2A20;
+    --ink-soft:#86705F;
+    --line:#EAD9BD;
+    --coral:#E25B43;
+    --amber:#F0A03B;
+    --gold:#E4BC3C;
+    --green:#5FA463;
+    --teal:#3F9E8E;
+    --sky:#3E8CB5;
+    --deep:#356E9E;
+    --close:#C9743E;
+    --fig:#FBE7C8;
+    --tespn:#E2EFE6;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"PingFang TC","Heiti TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:28px 20px 80px;}
+
+  /* ---------- Header ---------- */
+  header.hd{
+    position:relative;
+    border:2px solid var(--ink);
+    border-radius:18px;
+    background:
+      linear-gradient(180deg,#FFFCF4 0%, #FFF6E6 100%);
+    padding:26px 26px 22px;
+    overflow:hidden;
+  }
+  header.hd::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(circle at 88% -10%, rgba(240,160,59,.22), transparent 42%),
+      radial-gradient(circle at 8% 120%, rgba(95,164,99,.18), transparent 45%);
+    pointer-events:none;
+  }
+  .eyebrow{
+    font-size:.78rem;letter-spacing:.32em;font-weight:700;
+    color:var(--coral);margin:0 0 8px;text-transform:uppercase;
+  }
+  h1.title{
+    margin:0;font-size:2.05rem;font-weight:800;letter-spacing:.01em;
+    line-height:1.25;
+  }
+  h1.title small{display:block;font-size:1.05rem;font-weight:700;color:var(--ink-soft);margin-top:6px;letter-spacing:.04em;}
+  .lede{margin:14px 0 0;font-size:.98rem;color:var(--ink-soft);max-width:62ch;}
+  .credit{margin:12px 0 0;font-size:.8rem;color:var(--ink-soft);}
+
+  /* ---------- Toolbar ---------- */
+  .toolbar{
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+    margin:22px 0 8px;
+  }
+  .field{display:flex;flex-direction:column;gap:4px;}
+  .field label{font-size:.72rem;font-weight:700;letter-spacing:.12em;color:var(--ink-soft);}
+  select{
+    appearance:none;background:var(--card);border:2px solid var(--ink);
+    border-radius:10px;padding:9px 34px 9px 12px;font:inherit;font-weight:700;color:var(--ink);
+    cursor:pointer;
+    background-image:linear-gradient(45deg,transparent 50%,var(--coral) 50%),linear-gradient(135deg,var(--coral) 50%,transparent 50%);
+    background-position:calc(100% - 18px) 55%,calc(100% - 12px) 55%;
+    background-size:6px 6px,6px 6px;background-repeat:no-repeat;
+  }
+  .btns{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;}
+  button.tb{
+    border:2px solid var(--ink);background:var(--card);color:var(--ink);
+    font:inherit;font-weight:700;font-size:.86rem;border-radius:10px;padding:9px 14px;cursor:pointer;
+    transition:transform .08s ease, background .15s ease;
+  }
+  button.tb:hover{background:#FFF1D6;}
+  button.tb:active{transform:translateY(1px);}
+  button.tb.on{background:var(--gold);}
+  button.tb:focus-visible,select:focus-visible{outline:3px solid var(--sky);outline-offset:2px;}
+
+  /* ---------- Teacher panel ---------- */
+  details.teacher{
+    margin:14px 0 0;border:2px dashed var(--close);border-radius:14px;
+    background:#FFF7EC;overflow:hidden;
+  }
+  details.teacher>summary{
+    list-style:none;cursor:pointer;padding:14px 18px;font-weight:800;
+    display:flex;align-items:center;gap:10px;color:var(--close);
+  }
+  details.teacher>summary::-webkit-details-marker{display:none;}
+  .chip{font-size:.7rem;background:var(--close);color:#fff;border-radius:999px;padding:2px 10px;font-weight:700;letter-spacing:.1em;}
+  .tw{font-size:.78rem;color:var(--ink-soft);margin-left:auto;font-weight:600;}
+  details.teacher[open] .tw::after{content:"（點此收合）";}
+  details.teacher:not([open]) .tw::after{content:"（點此展開教案）";}
+  .tbody{padding:4px 18px 20px;}
+  .tbody h3{font-size:1rem;margin:18px 0 8px;color:var(--ink);border-left:5px solid var(--amber);padding-left:10px;}
+  ol.flow{margin:0;padding-left:0;list-style:none;counter-reset:f;}
+  ol.flow li{counter-increment:f;position:relative;padding:7px 0 7px 46px;border-bottom:1px solid var(--line);font-size:.92rem;}
+  ol.flow li:last-child{border-bottom:none;}
+  ol.flow li::before{
+    content:counter(f);position:absolute;left:0;top:8px;width:30px;height:30px;
+    background:var(--amber);color:#fff;border-radius:8px;display:grid;place-items:center;font-weight:800;font-size:.9rem;
+  }
+  ol.flow b{color:var(--coral);}
+  table.sel{width:100%;border-collapse:collapse;font-size:.88rem;margin-top:4px;}
+  table.sel th,table.sel td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top;}
+  table.sel th{background:#FBEAD0;font-weight:800;width:38%;}
+  .rubric{display:grid;gap:8px;margin-top:4px;}
+  .rubric div{font-size:.9rem;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:#fff;}
+  .rubric b{display:inline-block;min-width:5.2em;}
+
+  /* ---------- Case context ---------- */
+  .context{
+    margin:26px 0 6px;border:2px solid var(--ink);border-radius:14px;background:var(--card);
+    padding:18px 20px;position:relative;
+  }
+  .context .tag{
+    display:inline-block;font-size:.74rem;font-weight:800;letter-spacing:.14em;color:#fff;background:var(--coral);
+    border-radius:999px;padding:3px 12px;margin-bottom:8px;
+  }
+  .context h2{margin:0 0 6px;font-size:1.3rem;}
+  .context p{margin:0;font-size:.96rem;color:var(--ink);}
+  .carenote{margin-top:10px;font-size:.82rem;color:var(--close);background:#FFF2E2;border-left:4px solid var(--close);padding:8px 12px;border-radius:0 8px 8px 0;}
+
+  .grouplabel{display:flex;align-items:center;gap:12px;margin:30px 0 10px;}
+  .grouplabel .l{font-weight:800;font-size:1.05rem;letter-spacing:.04em;}
+  .grouplabel .l .en{color:var(--ink-soft);font-weight:700;font-size:.82rem;letter-spacing:.12em;}
+  .grouplabel .bar{flex:1;height:3px;border-radius:3px;}
+  .glf .bar{background:linear-gradient(90deg,var(--coral),var(--gold));}
+  .glt .bar{background:linear-gradient(90deg,var(--green),var(--sky));}
+
+  /* ---------- Steps ---------- */
+  .path{position:relative;margin-left:6px;padding-left:30px;border-left:3px dashed var(--line);}
+  .step{position:relative;margin:0 0 16px;}
+  .medal{
+    position:absolute;left:-49px;top:0;width:44px;height:44px;border-radius:12px;
+    color:#fff;font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:1.5rem;
+    display:grid;place-items:center;border:2px solid rgba(0,0,0,.12);
+    box-shadow:0 2px 0 rgba(0,0,0,.12);
+  }
+  .card{
+    background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:14px 16px 16px;
+  }
+  .step.fig .card{box-shadow:-6px 0 0 -2px var(--fig);}
+  .step.tespn .card{box-shadow:-6px 0 0 -2px var(--tespn);}
+  .chead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  .chead .cn{font-weight:800;font-size:1.12rem;}
+  .chead .en{color:var(--ink-soft);font-weight:700;font-size:.8rem;letter-spacing:.08em;}
+  .seltag{margin-left:auto;font-size:.72rem;font-weight:800;border-radius:999px;padding:3px 11px;color:#3A2A20;}
+  .q{margin:8px 0 10px;font-size:.93rem;color:var(--ink);}
+  .q b{color:var(--coral);}
+  textarea{
+    width:100%;min-height:70px;resize:vertical;border:1.5px solid var(--line);border-radius:10px;
+    padding:10px 12px;font:inherit;font-size:.95rem;line-height:1.6;background:#FFFEFB;color:var(--ink);
+  }
+  textarea:focus-visible{outline:3px solid var(--sky);outline-offset:1px;border-color:var(--sky);}
+  details.ref{margin-top:8px;}
+  details.ref summary{
+    list-style:none;cursor:pointer;font-size:.82rem;font-weight:700;color:var(--teal);
+    display:inline-flex;align-items:center;gap:6px;user-select:none;
+  }
+  details.ref summary::-webkit-details-marker{display:none;}
+  details.ref summary::before{content:"▸";transition:transform .15s;}
+  details.ref[open] summary::before{transform:rotate(90deg);}
+  .refbody{margin-top:6px;font-size:.9rem;background:#F2F8F3;border:1px solid #CFE6D4;border-radius:10px;padding:10px 12px;color:#2E4F36;}
+  .refempty{color:var(--ink-soft);font-style:italic;}
+
+  /* ---------- Reflection ---------- */
+  .reflect{margin-top:34px;border:2px solid var(--ink);border-radius:16px;overflow:hidden;background:var(--card);}
+  .reflect .rh{background:var(--deep);color:#fff;padding:12px 18px;font-weight:800;font-size:1.1rem;letter-spacing:.04em;}
+  .rcols{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+  .rcol{padding:16px 18px;}
+  .rcol:first-child{border-right:2px solid var(--line);background:#FBF6EC;}
+  .rcol h4{margin:0 0 8px;font-size:.98rem;}
+  .rcol h4 .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;vertical-align:middle;}
+  .decide{padding:16px 18px;border-top:2px solid var(--line);background:#FFF7E8;}
+  .decide h4{margin:0 0 8px;font-size:1rem;color:var(--close);}
+  .decide .rq{font-size:.9rem;color:var(--ink-soft);margin:0 0 8px;}
+
+  footer.ft{margin-top:34px;font-size:.8rem;color:var(--ink-soft);text-align:center;line-height:1.8;}
+  footer.ft b{color:var(--coral);}
+
+  @media (max-width:640px){
+    .wrap{padding:18px 14px 60px;}
+    h1.title{font-size:1.6rem;}
+    .rcols{grid-template-columns:1fr;}
+    .rcol:first-child{border-right:none;border-bottom:2px solid var(--line);}
+    .btns{margin-left:0;width:100%;}
+    .medal{width:38px;height:38px;left:-46px;font-size:1.25rem;}
+    .path{padding-left:24px;}
+  }
+
+  /* ---------- Print ---------- */
+  @media print{
+    body{background:#fff;}
+    .wrap{max-width:100%;padding:0;}
+    .toolbar,.tw{display:none !important;}
+    header.hd{border-color:#000;}
+    details.teacher,details.ref{break-inside:avoid;}
+    details.ref{display:none;}            /* 列印學生鷹架時隱藏參考答案 */
+    .step,.context,.reflect{break-inside:avoid;}
+    textarea{min-height:64px;border-color:#999;}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .body-show-ref details.ref{display:block;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hd">
+    <p class="eyebrow">社會情緒學習 × 社會科</p>
+    <h1 class="title">歷史抉擇現場
+      <small>FIG-TESPN 思考鷹架 ｜ Social Problem-Solving Scaffold</small>
+    </h1>
+    <p class="lede">
+      站在歷史人物做決定的那一刻——先讀懂他的<strong>情緒、問題與目標</strong>，再一起想清楚他<strong>有哪些選擇、會付出什麼代價</strong>，
+      最後回頭問自己：「如果是我，我會怎麼做？」把社會情緒學習 (SEL) 的五個面向，<strong>融進一堂社會課</strong>裡。
+    </p>
+    <p class="credit">框架：Maurice Elias 的社會問題解決法 (FIG-TESPN)　｜　設計給五年級社會科・新北市課程輔導團社會領域</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="field">
+      <label for="caseSel">選擇歷史案例</label>
+      <select id="caseSel" aria-label="選擇歷史案例">
+        <option value="mona">莫那魯道・霧社事件（台灣・1930）</option>
+        <option value="qin">秦始皇・焚書坑儒（中國・秦）</option>
+        <option value="chiang">蔣渭水・非武裝抗日（台灣・1920s）— 延伸</option>
+        <option value="police">日治時期的台灣人警察（台灣・日治）— 延伸</option>
+      </select>
+    </div>
+    <div class="btns">
+      <button class="tb" id="refBtn" aria-pressed="false">顯示參考思考</button>
+      <button class="tb" id="clearBtn">清除我的作答</button>
+      <button class="tb" id="printBtn">列印 / 存成 PDF</button>
+    </div>
+  </div>
+
+  <details class="teacher">
+    <summary><span class="chip">教師端</span> 一節課教案・SEL 對照・評量規準 <span class="tw"></span></summary>
+    <div class="tbody">
+      <h3>課堂流程（40 分鐘）</h3>
+      <ol class="flow">
+        <li><b>情境導入（5 分）</b>：用影片或圖片帶入歷史現場，喚起學生對當事人處境的情緒共感（建立先備理解）。</li>
+        <li><b>個人初思（5 分）</b>：學生獨立完成 <b>F・I・G</b>——先讀懂當事人的感受、問題與目標。</li>
+        <li><b>分組探究（12 分）</b>：小組合作完成 <b>T・E・S</b>——一起想出多種選擇、預想後果、做出選擇並說明理由。</li>
+        <li><b>全班分享（8 分）</b>：各組報告抉擇與依據，老師追問「選擇」與「後果」之間的關聯。</li>
+        <li><b>對照反思（8 分）</b>：完成「歷史 ↔ 我」對照，導向<b>負責任的決定</b>。</li>
+        <li><b>統整收尾（2 分）</b>：連結現實議題（政黨對立、國際衝突），點出社會情緒學習的核心。</li>
+      </ol>
+
+      <h3>FIG-TESPN 與 SEL 五面向對照</h3>
+      <table class="sel">
+        <tr><th>SEL 面向</th><td>對應的思考步驟</td></tr>
+        <tr><th>自我覺察 Self-Awareness</th><td>F 情緒覺察、「歷史 ↔ 我」反思</td></tr>
+        <tr><th>社會覺察 Social Awareness</th><td>I 界定問題、N 檢視結果（理解他人的處境與情緒）</td></tr>
+        <tr><th>自我管理 Self-Management</th><td>T 想出方法、P 計畫執行（停下來想、不衝動）</td></tr>
+        <tr><th>人際關係技巧 Relationship Skills</th><td>全程的分組討論與全班分享</td></tr>
+        <tr><th>負責任的決定 Responsible Decision-Making</th><td>G 目標、E 後果、S 選擇與最後的反思</td></tr>
+      </table>
+
+      <h3>評量規準（三級）</h3>
+      <div class="rubric">
+        <div><b>待加強</b>　能填寫部分欄位，但「選擇」與「後果」之間缺乏關聯。</div>
+        <div><b>達成</b>　能完整說明當事人的情緒、問題與目標，並列出選擇與對應的後果。</div>
+        <div><b>優秀</b>　能分析多種選擇的利弊，並在「歷史 ↔ 我」對照中提出有依據的個人判斷。</div>
+      </div>
+    </div>
+  </details>
+
+  <!-- Case context -->
+  <section class="context">
+    <span class="tag" id="ctxTag">台灣・1930</span>
+    <h2 id="ctxTitle">案例情境</h2>
+    <p id="ctxBody"></p>
+    <p class="carenote" id="ctxNote" hidden></p>
+  </section>
+
+  <!-- FIG group -->
+  <div class="grouplabel glf">
+    <span class="l">FIG ｜ 覺察與定向 <span class="en">UNDERSTAND</span></span>
+    <span class="bar"></span>
+  </div>
+  <div class="path" id="figPath"></div>
+
+  <!-- TESPN group -->
+  <div class="grouplabel glt">
+    <span class="l">TESPN ｜ 歷程與行動 <span class="en">SOLVE</span></span>
+    <span class="bar"></span>
+  </div>
+  <div class="path" id="tespnPath"></div>
+
+  <!-- Reflection -->
+  <section class="reflect">
+    <div class="rh">歷史 ↔ 我　｜　負責任的決定</div>
+    <div class="rcols">
+      <div class="rcol">
+        <h4><span class="dot" style="background:var(--amber)"></span>歷史人物的選擇</h4>
+        <textarea data-step="r_them" placeholder="他最後選了什麼？為了什麼目標、付出了什麼代價？"></textarea>
+      </div>
+      <div class="rcol">
+        <h4><span class="dot" style="background:var(--sky)"></span>如果是我</h4>
+        <textarea data-step="r_me" placeholder="換成你站在那個位置，你會怎麼選？為什麼？"></textarea>
+      </div>
+    </div>
+    <div class="decide">
+      <h4>我的負責任決定</h4>
+      <p class="rq" id="reflectQ"></p>
+      <textarea data-step="r_decide" placeholder="我和他最大的不同是……　經過 FIG-TESPN 的思考，我學到面對難題時……"></textarea>
+    </div>
+  </section>
+
+  <footer class="ft">
+    <b>FIG-TESPN</b>　F 情緒 → I 問題 → G 目標 → T 方法 → E 後果 → S 選擇 → P 計畫 → N 檢視<br>
+    一份鷹架，走遍社會科的每一個歷史抉擇。可直接列印發給學生，或投影於課堂共讀共寫。
+  </footer>
+
+</div>
+
+<script>
+/* ---------------- 八步驟定義（通用引導問句） ---------------- */
+const STEPS = [
+  {k:"F",group:"fig",cn:"情緒覺察",en:"Feelings",sel:"自我覺察",color:"#E25B43",seltagbg:"#FBD9CF",
+    q:"當事人此刻有什麼<b>感受</b>？他在害怕、生氣或擔心什麼？換成你，又會有什麼感受？"},
+  {k:"I",group:"fig",cn:"界定問題",en:"Identify",sel:"社會覺察",color:"#F0A03B",seltagbg:"#FCE6C6",
+    q:"他真正面對的<b>問題</b>是什麼？牽涉到哪些人？這些人各自的立場又是什麼？"},
+  {k:"G",group:"fig",cn:"設定目標",en:"Goals",sel:"負責任的決定",color:"#D9A82E",seltagbg:"#F6E7B6",
+    q:"他最想<b>達成</b>什麼？這個目標背後，他最在乎的是什麼價值？"},
+  {k:"T",group:"tespn",cn:"想出方法",en:"Think",sel:"自我管理",color:"#5FA463",seltagbg:"#D7EBD9",
+    q:"先別急著下結論——他至少有哪些<b>選擇</b>？試著想出三種以上。"},
+  {k:"E",group:"tespn",cn:"預想後果",en:"Envision",sel:"負責任的決定",color:"#3F9E8E",seltagbg:"#CFE9E3",
+    q:"每一個選擇，可能帶來什麼<b>好處與代價</b>？分別會影響到誰？"},
+  {k:"S",group:"tespn",cn:"做出選擇",en:"Select",sel:"負責任的決定",color:"#3E8CB5",seltagbg:"#CFE3EF",
+    q:"他最後（或你會）選哪一個？<b>為什麼</b>這個選擇最好？"},
+  {k:"P",group:"tespn",cn:"計畫執行",en:"Plan",sel:"自我管理",color:"#356E9E",seltagbg:"#D0DCEA",
+    q:"要怎麼<b>做</b>才可能成功？過程中可能遇到什麼困難？"},
+  {k:"N",group:"tespn",cn:"檢視結果",en:"Notice",sel:"社會覺察",color:"#C9743E",seltagbg:"#F1DBC6",
+    q:"結果<b>如何</b>？如果重來一次，會不會改變決定？從中學到什麼？"},
+];
+
+/* ---------------- 四個案例資料 ---------------- */
+const CASES = {
+  mona:{
+    tag:"台灣・1930",
+    title:"莫那魯道・霧社事件",
+    body:"1930 年，台灣在日本殖民統治下。賽德克族 (Seediq) 長期被迫勞役，傳統獵場與文化受到壓制，族人的尊嚴一再受辱。馬赫坡社頭目莫那魯道 (Mona Rudao) 必須做出抉擇。",
+    note:"提醒學生：以尊重的態度理解這段歷史，重點在「讀懂處境與抉擇」，而不是評斷對錯或美化衝突。",
+    reflectQ:"面對長期的不公與尊嚴受損，你會選擇忍耐、溝通，還是反抗？你和莫那魯道在處境與選擇上，有什麼不同？",
+    ref:{
+      F:"屈辱、憤怒、不甘，也夾雜著對族人安危與未來的深深憂慮。",
+      I:"族人長期遭受不平等對待與壓迫，傳統文化和尊嚴正在消失，和平的管道難以改變現況。",
+      G:"守護族人的尊嚴、文化與生存，反抗殖民壓迫。",
+      T:"① 忍耐配合，換取暫時的安穩　② 繼續以陳情、溝通爭取　③ 聯合各社武裝起義。",
+      E:"① 保命，但屈辱與壓迫不會停止　② 過去多次嘗試成效有限　③ 可能短暫反抗成功，但日方勢必強力報復，族人將付出慘重代價。",
+      S:"選擇武裝起義（霧社事件）。",
+      P:"趁公學校運動會、日人聚集時，聯合各社一同發動。",
+      N:"日軍以優勢武力鎮壓，族人傷亡慘重；但這場抵抗成為台灣原住民捍衛尊嚴的重要歷史象徵，至今仍被記得。"
+    }
+  },
+  qin:{
+    tag:"中國・秦",
+    title:"秦始皇・焚書坑儒",
+    body:"統一六國後，秦始皇推行郡縣制與中央集權。當時百家爭鳴，許多儒生引用古代典籍批評時政、主張恢復分封，動搖了新帝國的統治基礎。秦始皇必須決定如何回應這些反對的聲音。",
+    note:"",
+    reflectQ:"面對反對你的人，你會選擇壓制還是溝通？你覺得秦始皇的選擇，問題出在哪裡？",
+    ref:{
+      F:"憤怒、焦慮、不安，擔心政權不穩。",
+      I:"儒生借古諷今、反對郡縣制，挑戰中央集權的統治基礎。",
+      G:"鞏固皇權、統一思想、維持帝國長治久安。",
+      T:"① 包容各家、開放討論　② 加強官方教育、收編學者為己用　③ 以高壓手段箝制言論（焚書坑儒）。",
+      E:"① 思想多元，但批評難止、政權受挑戰　② 見效慢，未必能消除反對　③ 短期壓制反對，卻累積民怨、造成文化斷層。",
+      S:"選擇焚書坑儒。",
+      P:"下令焚毀民間典籍、坑殺批評者。",
+      N:"短期壓下了反對，卻低估民心離散的速度，反而加速秦朝崩解，後世評價多為負面。"
+    }
+  },
+  chiang:{
+    tag:"台灣・1920s",
+    title:"蔣渭水・非武裝抗日",
+    body:"1920 年代，台灣人在日本統治下受到不平等對待。醫師蔣渭水 (Chiang Wei-shui) 沒有選擇武力，而是創辦台灣文化協會、推動議會設置請願，以文化與教育喚醒台灣人。為什麼他做出這樣的選擇？",
+    note:"延伸案例：參考思考只給部分提示，鼓勵學生自己讀課文、完成整張鷹架。",
+    reflectQ:"你認為「和平啟蒙」和「激烈抗爭」，哪一種更能帶來改變？為什麼？",
+    ref:{
+      F:"（換你想想看）對台灣人受到不平等對待的不平，以及想喚醒同胞的使命感。",
+      I:"",
+      G:"提升台灣人的文化與政治地位，爭取自治與尊嚴。",
+      T:"① 武裝反抗　② 隱忍接受現狀　③ 以文化、教育、和平請願啟蒙民眾、爭取權益。",
+      E:"",
+      S:"",
+      P:"",
+      N:""
+    }
+  },
+  police:{
+    tag:"台灣・日治",
+    title:"日治時期的台灣人警察",
+    body:"日本統治時期，有些台灣人擔任殖民體制下的警察。當上級的命令可能傷害自己的同胞時，他們陷入兩難：要服從上級、保住職位，還是站在台灣人這邊？換作是你，你會怎麼想？",
+    note:"延伸案例：每個人的目標可能不同，沒有標準答案，重點在說清楚「選擇」與「後果」的關聯。",
+    reflectQ:"如果你的工作要求你做違背良心的事，你會怎麼辦？",
+    ref:{
+      F:"忠誠與良知互相拉扯，矛盾、為難。",
+      I:"執行上級的命令，可能會傷害到自己的同胞。",
+      G:"（因人而異）有人想保住職位、求升遷；有人想守護同胞與正義。",
+      T:"① 完全配合上級命令　② 表面配合、消極應付　③ 暗中協助同胞、抵制不義的命令。",
+      E:"",
+      S:"",
+      P:"",
+      N:""
+    }
+  }
+};
+
+/* ---------------- 建立步驟卡片 ---------------- */
+function buildSteps(){
+  const figEl=document.getElementById("figPath");
+  const tesEl=document.getElementById("tespnPath");
+  figEl.innerHTML="";tesEl.innerHTML="";
+  STEPS.forEach(s=>{
+    const wrap=document.createElement("div");
+    wrap.className="step "+s.group;
+    wrap.innerHTML=`
+      <div class="medal" style="background:${s.color}">${s.k}</div>
+      <div class="card">
+        <div class="chead">
+          <span class="cn">${s.cn}</span>
+          <span class="en">${s.en}</span>
+          <span class="seltag" style="background:${s.seltagbg}">SEL・${s.sel}</span>
+        </div>
+        <p class="q">${s.q}</p>
+        <textarea data-step="${s.k}" placeholder="寫下你的想法……"></textarea>
+        <details class="ref">
+          <summary>看看參考思考</summary>
+          <div class="refbody" data-ref="${s.k}"></div>
+        </details>
+      </div>`;
+    (s.group==="fig"?figEl:tesEl).appendChild(wrap);
+  });
+}
+
+/* ---------------- 狀態（記憶體，不使用瀏覽器儲存） ---------------- */
+let current="mona";
+const answers={}; // answers[caseId][stepKey] = text
+Object.keys(CASES).forEach(c=>answers[c]={});
+let showRef=false;
+
+function saveCurrentInputs(){
+  document.querySelectorAll("textarea[data-step]").forEach(t=>{
+    answers[current][t.dataset.step]=t.value;
+  });
+}
+function loadCase(id){
+  current=id;
+  const c=CASES[id];
+  document.getElementById("ctxTag").textContent=c.tag;
+  document.getElementById("ctxTitle").textContent=c.title;
+  document.getElementById("ctxBody").textContent=c.body;
+  const noteEl=document.getElementById("ctxNote");
+  if(c.note){noteEl.textContent="💡 "+c.note;noteEl.hidden=false;}else{noteEl.hidden=true;}
+  document.getElementById("reflectQ").textContent="思考題："+c.reflectQ;
+
+  // refill textareas from memory
+  document.querySelectorAll("textarea[data-step]").forEach(t=>{
+    t.value=answers[id][t.dataset.step]||"";
+  });
+  // refill reference bodies
+  document.querySelectorAll("[data-ref]").forEach(el=>{
+    const v=c.ref[el.dataset.ref];
+    if(v){el.textContent=v;el.classList.remove("refempty");}
+    else{el.textContent="這一格留給你自己想——讀讀課文，試著填填看！";el.classList.add("refempty");}
+  });
+}
+
+/* ---------------- 事件 ---------------- */
+function init(){
+  buildSteps();
+  loadCase("mona");
+
+  document.addEventListener("input",e=>{
+    if(e.target.matches("textarea[data-step]")){
+      answers[current][e.target.dataset.step]=e.target.value;
+    }
+  });
+
+  document.getElementById("caseSel").addEventListener("change",e=>{
+    saveCurrentInputs();
+    loadCase(e.target.value);
+  });
+
+  const refBtn=document.getElementById("refBtn");
+  refBtn.addEventListener("click",()=>{
+    showRef=!showRef;
+    refBtn.classList.toggle("on",showRef);
+    refBtn.setAttribute("aria-pressed",showRef);
+    refBtn.textContent=showRef?"隱藏參考思考":"顯示參考思考";
+    document.querySelectorAll("details.ref").forEach(d=>d.open=showRef);
+    document.body.classList.toggle("body-show-ref",showRef);
+  });
+
+  document.getElementById("clearBtn").addEventListener("click",()=>{
+    if(confirm("確定要清除這個案例中所有你填寫的內容嗎？")){
+      answers[current]={};
+      document.querySelectorAll("textarea[data-step]").forEach(t=>t.value="");
+    }
+  });
+
+  document.getElementById("printBtn").addEventListener("click",()=>window.print());
+}
+document.addEventListener("DOMContentLoaded",init);
+</script>
+</body>
+</html>

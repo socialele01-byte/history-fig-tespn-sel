@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>抉擇現場・莫那魯道 — FIG-TESPN 骰子抉擇（V2）</title>
+<style>
+  :root{
+    --paper:#FBF3E2;
+    --card:#FFFDF8;
+    --ink:#3A2A20;
+    --ink-soft:#86705F;
+    --line:#EAD9BD;
+    --coral:#E25B43;
+    --amber:#F0A03B;
+    --gold:#E4BC3C;
+    --green:#5FA463;
+    --teal:#3F9E8E;
+    --sky:#3E8CB5;
+    --deep:#356E9E;
+    --close:#C9743E;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"PingFang TC","Heiti TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:26px 20px 80px;}
+
+  /* ---------- Header ---------- */
+  header.hd{
+    position:relative;border:2px solid var(--ink);border-radius:18px;
+    background:linear-gradient(180deg,#FFFCF4 0%, #FFF6E6 100%);
+    padding:24px 26px 20px;overflow:hidden;
+  }
+  header.hd::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(circle at 90% -15%, rgba(226,91,67,.20), transparent 44%),
+               radial-gradient(circle at 4% 125%, rgba(62,140,181,.16), transparent 46%);
+  }
+  .eyebrow{font-size:.76rem;letter-spacing:.3em;font-weight:700;color:var(--coral);margin:0 0 8px;text-transform:uppercase;}
+  h1.title{margin:0;font-size:1.95rem;font-weight:800;line-height:1.25;}
+  h1.title small{display:block;font-size:1rem;font-weight:700;color:var(--ink-soft);margin-top:6px;letter-spacing:.04em;}
+  .verbadge{position:absolute;top:18px;right:20px;background:var(--deep);color:#fff;font-weight:800;font-size:.74rem;letter-spacing:.14em;border-radius:999px;padding:4px 13px;}
+  .credit{margin:12px 0 0;font-size:.8rem;color:var(--ink-soft);}
+
+  .carebox{
+    margin:16px 0 0;border:2px dashed var(--close);border-radius:12px;background:#FFF6EC;
+    padding:12px 16px;font-size:.86rem;color:var(--ink);
+  }
+  .carebox b{color:var(--close);}
+
+  /* ---------- Progress ---------- */
+  .progress{display:flex;gap:6px;margin:22px 0 10px;flex-wrap:wrap;}
+  .pstep{
+    flex:1;min-width:120px;border:2px solid var(--line);border-radius:10px;background:#FFFDF8;
+    padding:8px 10px;font-size:.8rem;color:var(--ink-soft);font-weight:700;text-align:center;transition:.2s;
+  }
+  .pstep .k{font-family:Georgia,serif;font-size:.72rem;letter-spacing:.18em;display:block;color:var(--amber);}
+  .pstep.active{border-color:var(--ink);background:var(--gold);color:var(--ink);}
+  .pstep.done{border-color:var(--green);background:#E5F1E6;color:#2E4F36;}
+  .pstep.done .k,.pstep.active .k{color:inherit;}
+
+  /* ---------- Stage shell ---------- */
+  .stage{display:none;animation:fade .35s ease;}
+  .stage.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .panel{border:2px solid var(--ink);border-radius:16px;background:var(--card);padding:20px 22px;margin-top:14px;}
+  .stagehead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 6px;}
+  .stagehead h2{margin:0;font-size:1.4rem;}
+  .stagehead .en{color:var(--ink-soft);font-weight:700;font-size:.8rem;letter-spacing:.1em;}
+
+  .narr{font-size:1rem;color:var(--ink);margin:6px 0 0;}
+  .narr strong{color:var(--coral);}
+
+  /* FIG mini cards */
+  .figrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;}
+  .figc{border:2px solid var(--ink);border-radius:12px;padding:12px;background:#FFF9EE;}
+  .figc .medal{width:34px;height:34px;border-radius:9px;color:#fff;font-family:Georgia,serif;font-weight:700;font-size:1.2rem;display:grid;place-items:center;margin-bottom:8px;}
+  .figc h3{margin:0 0 4px;font-size:.95rem;}
+  .figc h3 .en{font-size:.7rem;color:var(--ink-soft);font-weight:700;letter-spacing:.08em;margin-left:4px;}
+  .figc p{margin:0;font-size:.88rem;color:var(--ink);}
+
+  /* ---------- Path choices ---------- */
+  .sub{font-size:.92rem;color:var(--ink-soft);margin:4px 0 0;}
+  .paths{display:grid;gap:12px;margin-top:16px;}
+  .path{
+    text-align:left;border:2px solid var(--ink);border-radius:14px;background:#fff;cursor:pointer;
+    padding:0;overflow:hidden;font:inherit;color:var(--ink);transition:transform .08s,box-shadow .15s;
+    display:flex;
+  }
+  .path:hover{box-shadow:0 4px 0 rgba(0,0,0,.12);transform:translateY(-1px);}
+  .path:active{transform:translateY(1px);}
+  .path .stripe{width:12px;flex:none;}
+  .path .pin{padding:13px 16px;flex:1;}
+  .path .ptitle{font-weight:800;font-size:1.05rem;}
+  .path .pdesc{font-size:.9rem;color:var(--ink);margin-top:2px;}
+  .path .pval{font-size:.82rem;color:var(--ink-soft);margin-top:6px;}
+  .path .pval b{color:var(--close);}
+  .path.sel{outline:4px solid var(--gold);outline-offset:-2px;}
+  .pA .stripe{background:var(--amber);} .pB .stripe{background:var(--sky);} .pC .stripe{background:var(--coral);}
+  .path:focus-visible{outline:4px solid var(--sky);outline-offset:2px;}
+
+  /* ---------- Dice ---------- */
+  .dicewrap{display:flex;flex-direction:column;align-items:center;gap:14px;margin:10px 0 4px;}
+  .chosenline{font-size:.92rem;color:var(--ink-soft);text-align:center;}
+  .chosenline b{color:var(--coral);}
+  .die{
+    width:92px;height:92px;border-radius:18px;background:#fff;border:3px solid var(--ink);
+    display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
+    padding:12px;box-shadow:0 5px 0 rgba(0,0,0,.14);
+  }
+  .die .pip{display:grid;place-items:center;}
+  .die .pip::after{content:"";width:15px;height:15px;border-radius:50%;background:var(--ink);transform:scale(0);transition:transform .12s;}
+  .die .pip.on::after{transform:scale(1);}
+  .die.rolling{animation:shake .12s linear infinite;}
+  @keyframes shake{0%{transform:rotate(-6deg) translateY(0);}50%{transform:rotate(6deg) translateY(-3px);}100%{transform:rotate(-6deg) translateY(0);}}
+  .rollnote{font-size:.84rem;color:var(--ink-soft);text-align:center;max-width:46ch;}
+
+  /* outcome */
+  .outcome{margin-top:4px;border:2px solid var(--ink);border-radius:14px;padding:16px 18px;background:#FFF9EE;}
+  .outcome .obadge{display:inline-block;font-size:.74rem;font-weight:800;letter-spacing:.1em;color:#fff;border-radius:999px;padding:3px 12px;margin-bottom:8px;}
+  .outcome h3{margin:0 0 6px;font-size:1.1rem;}
+  .outcome p{margin:0;font-size:.96rem;}
+
+  /* history reveal */
+  .reveal{border-left:6px solid var(--coral);background:#FFF4EE;border-radius:0 12px 12px 0;padding:14px 18px;margin-top:12px;}
+  .reveal h3{margin:0 0 6px;color:var(--coral);font-size:1.05rem;}
+  .reveal p{margin:0 0 6px;font-size:.95rem;}
+  .reveal p:last-child{margin-bottom:0;}
+
+  /* reflection */
+  .rsummary{background:#EAF3F8;border:1.5px solid #BFDDEC;border-radius:12px;padding:12px 16px;font-size:.92rem;margin-bottom:14px;}
+  .rsummary b{color:var(--deep);}
+  .rq{font-weight:800;margin:14px 0 6px;font-size:.98rem;}
+  .rq .sel{font-size:.72rem;font-weight:800;color:#fff;background:var(--teal);border-radius:999px;padding:2px 9px;margin-left:6px;letter-spacing:.06em;}
+  textarea{
+    width:100%;min-height:64px;resize:vertical;border:1.5px solid var(--line);border-radius:10px;
+    padding:10px 12px;font:inherit;font-size:.95rem;line-height:1.6;background:#FFFEFB;color:var(--ink);
+  }
+  textarea:focus-visible{outline:3px solid var(--sky);outline-offset:1px;border-color:var(--sky);}
+
+  /* nav buttons */
+  .nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+  button.btn{
+    border:2px solid var(--ink);font:inherit;font-weight:800;font-size:.95rem;border-radius:12px;
+    padding:11px 20px;cursor:pointer;transition:transform .08s,background .15s;
+  }
+  button.btn:active{transform:translateY(1px);}
+  button.btn:focus-visible{outline:3px solid var(--sky);outline-offset:2px;}
+  .btn.primary{background:var(--coral);color:#fff;}
+  .btn.primary:hover{background:#d24d36;}
+  .btn.ghost{background:var(--card);color:var(--ink);}
+  .btn.ghost:hover{background:#FFF1D6;}
+  .btn.go{background:var(--green);color:#fff;}
+  .btn.go:hover{background:#52955a;}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+
+  footer.ft{margin-top:30px;font-size:.8rem;color:var(--ink-soft);text-align:center;line-height:1.8;}
+  footer.ft b{color:var(--coral);}
+
+  @media (max-width:600px){
+    h1.title{font-size:1.55rem;}
+    .figrow{grid-template-columns:1fr;}
+    .verbadge{position:static;display:inline-block;margin-bottom:8px;}
+  }
+  @media print{
+    body{background:#fff;}
+    .progress,.nav,.carebox,.verbadge{display:none !important;}
+    .stage{display:block !important;page-break-inside:avoid;}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .stage{animation:none;}
+    .die.rolling{animation:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hd">
+    <span class="verbadge">V2・骰子抉擇</span>
+    <p class="eyebrow">社會情緒學習 × 台灣史</p>
+    <h1 class="title">抉擇現場：莫那魯道
+      <small>FIG-TESPN 骰子抉擇遊戲 ｜ 霧社事件・1930</small>
+    </h1>
+    <p class="credit">選一條路，擲出情勢，看見後果——再回頭問自己：如果是我，我會怎麼做？</p>
+    <div class="carebox">
+      <b>給玩家的提醒：</b>這是一段真實而沉重的歷史。骰子代表的是當時<b>沒有人能完全掌控的情勢變數</b>。
+      我們模擬「抉擇與後果」，是為了理解當時的處境與人們的選擇，<b>不是把傷痛當成輸贏</b>。請帶著尊重的心，一起走進這段歷史。
+    </div>
+  </header>
+
+  <div class="progress" id="progress">
+    <div class="pstep" data-i="0"><span class="k">F · I · G</span>讀懂處境</div>
+    <div class="pstep" data-i="1"><span class="k">T · S</span>做出抉擇</div>
+    <div class="pstep" data-i="2"><span class="k">E</span>擲骰・看後果</div>
+    <div class="pstep" data-i="3"><span class="k">N</span>歷史揭曉</div>
+    <div class="pstep" data-i="4"><span class="k">DECIDE</span>我的反思</div>
+  </div>
+
+  <!-- ===== Stage 0：FIG ===== -->
+  <section class="stage active" id="s0">
+    <div class="panel">
+      <div class="stagehead"><h2>讀懂處境</h2><span class="en">FIG ｜ Understand</span></div>
+      <p class="narr">
+        1930 年的秋天，台灣中部的霧社山區。賽德克族 (Seediq) 的族人，已經在日本殖民統治下忍受多年——
+        被迫做粗重的勞役、傳統獵場被限制、文化與尊嚴一再被踐踏。馬赫坡社的頭目<strong>莫那魯道 (Mona Rudao)</strong> 站在族人面前，
+        所有人的目光都望向他。接下來該怎麼走，他必須做出決定。
+      </p>
+      <div class="figrow">
+        <div class="figc">
+          <div class="medal" style="background:var(--coral)">F</div>
+          <h3>他的感受 <span class="en">Feelings</span></h3>
+          <p>屈辱與憤怒，還有對族人未來的深深憂慮。</p>
+        </div>
+        <div class="figc">
+          <div class="medal" style="background:var(--amber)">I</div>
+          <h3>真正的問題 <span class="en">Identify</span></h3>
+          <p>族人長期被壓迫、尊嚴受損，和平管道一次次無法改變現況。</p>
+        </div>
+        <div class="figc">
+          <div class="medal" style="background:var(--gold)">G</div>
+          <h3>他的目標 <span class="en">Goals</span></h3>
+          <p>守護族人的尊嚴、文化與生存。</p>
+        </div>
+      </div>
+      <div class="nav">
+        <button class="btn primary" onclick="go(1)">進入抉擇現場 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Stage 1：選擇 ===== -->
+  <section class="stage" id="s1">
+    <div class="panel">
+      <div class="stagehead"><h2>做出抉擇</h2><span class="en">T · S ｜ Choose a path</span></div>
+      <p class="sub">莫那魯道至少有三條路可以走。<b>選一條</b>——他若這樣選，他重視的是什麼？</p>
+      <div class="paths" id="paths">
+        <button class="path pA" data-p="A">
+          <span class="stripe"></span>
+          <span class="pin">
+            <span class="ptitle">A・忍耐配合</span>
+            <span class="pdesc">壓下怒火，先求一時的平安。</span>
+            <span class="pval">他若選這條，重視的是 <b>眼前的安全</b>。</span>
+          </span>
+        </button>
+        <button class="path pB" data-p="B">
+          <span class="stripe"></span>
+          <span class="pin">
+            <span class="ptitle">B・和平陳情</span>
+            <span class="pdesc">透過管道反映、繼續溝通爭取。</span>
+            <span class="pval">他若選這條，重視的是 <b>不流血的改變</b>。</span>
+          </span>
+        </button>
+        <button class="path pC" data-p="C">
+          <span class="stripe"></span>
+          <span class="pin">
+            <span class="ptitle">C・武裝起義</span>
+            <span class="pdesc">聯合各社，為尊嚴反抗到底。</span>
+            <span class="pval">他若選這條，重視的是 <b>族人的尊嚴</b>。</span>
+          </span>
+        </button>
+      </div>
+      <div class="nav">
+        <button class="btn ghost" onclick="go(0)">← 回上一步</button>
+        <button class="btn go" id="toRoll" disabled onclick="go(2)">擲骰，看情勢如何發展 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Stage 2：擲骰 ===== -->
+  <section class="stage" id="s2">
+    <div class="panel">
+      <div class="stagehead"><h2>擲出情勢之骰</h2><span class="en">E ｜ Envision consequences</span></div>
+      <div class="dicewrap">
+        <p class="chosenline" id="chosenLine"></p>
+        <div class="die" id="die" role="img" aria-label="骰子">
+          <span class="pip" data-c="1"></span><span class="pip" data-c="2"></span><span class="pip" data-c="3"></span>
+          <span class="pip" data-c="4"></span><span class="pip" data-c="5"></span><span class="pip" data-c="6"></span>
+          <span class="pip" data-c="7"></span><span class="pip" data-c="8"></span><span class="pip" data-c="9"></span>
+        </div>
+        <p class="rollnote">骰子代表你<b>無法完全掌控的變數</b>：其他社是否響應、消息是否走漏、日方如何反應……</p>
+        <button class="btn primary" id="rollBtn" onclick="rollDice()">擲骰 🎲</button>
+      </div>
+      <div class="outcome" id="outcome" hidden aria-live="polite">
+        <span class="obadge" id="oBadge"></span>
+        <h3 id="oTitle"></h3>
+        <p id="oText"></p>
+      </div>
+      <div class="nav">
+        <button class="btn ghost" onclick="go(1)">← 重新選擇</button>
+        <button class="btn go" id="toReveal" disabled onclick="go(3)">揭曉真實歷史 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Stage 3：歷史揭曉 ===== -->
+  <section class="stage" id="s3">
+    <div class="panel">
+      <div class="stagehead"><h2>歷史揭曉</h2><span class="en">N ｜ Notice what happened</span></div>
+      <div class="reveal">
+        <h3>莫那魯道，真正選擇了哪一條路？</h3>
+        <p>歷史上，莫那魯道選擇了 <strong>C・武裝起義</strong>。1930 年 10 月 27 日，賽德克族趁公學校運動會發動了<strong>霧社事件</strong>。</p>
+        <p>日方隨後調來優勢兵力強力鎮壓，族人傷亡慘重。這是一段沉重的歷史。</p>
+        <p>但這場為尊嚴而起的抵抗，成為台灣原住民反抗殖民壓迫的重要象徵，至今仍被人們記得與省思。</p>
+      </div>
+      <p class="sub" style="margin-top:14px">他做了選擇，也承擔了後果——而結果，從來不是任何人能完全預料的。這正是 <b>N・檢視結果</b> 要我們學會的事。</p>
+      <div class="nav">
+        <button class="btn ghost" onclick="go(2)">← 回到後果</button>
+        <button class="btn primary" onclick="go(4)">換我來想 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Stage 4：反思 ===== -->
+  <section class="stage" id="s4">
+    <div class="panel">
+      <div class="stagehead"><h2>我的反思</h2><span class="en">負責任的決定 ｜ Responsible Decision</span></div>
+      <div class="rsummary" id="rsummary"></div>
+
+      <p class="rq">我和莫那魯道最大的不同是…… <span class="sel">SEL・自我覺察</span></p>
+      <textarea data-r="diff" placeholder="我們的處境、選擇或想法，哪裡不一樣？"></textarea>
+
+      <p class="rq">如果我站在那個位置，我會選哪一條路？為什麼？ <span class="sel">SEL・負責任的決定</span></p>
+      <textarea data-r="choose" placeholder="我會選 A／B／C，因為……"></textarea>
+
+      <p class="rq">經過這場抉擇，我學到面對難題時…… <span class="sel">SEL・社會覺察</span></p>
+      <textarea data-r="learn" placeholder="例如：做決定前，要先想清楚每個選擇的後果……"></textarea>
+
+      <div class="nav">
+        <button class="btn ghost" onclick="go(3)">← 回上一步</button>
+        <button class="btn go" onclick="restart()">↻ 換一條路，再玩一次</button>
+        <button class="btn primary" onclick="window.print()">列印 / 存成 PDF</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="ft">
+    <b>FIG-TESPN</b>　讀懂處境(FIG) → 做出抉擇(T·S) → 預想後果(E) → 檢視結果(N) → 負責任的決定<br>
+    V2・莫那魯道骰子抉擇 ｜ 與 V1 多案例思考鷹架搭配使用
+  </footer>
+
+</div>
+
+<script>
+/* ---------- 骰子面：1-9 格，標出每個點數要亮的 pip ---------- */
+const FACE={1:[5],2:[1,9],3:[1,5,9],4:[1,3,7,9],5:[1,3,5,7,9],6:[1,3,4,6,7,9]};
+function paintDie(n){
+  document.querySelectorAll("#die .pip").forEach(p=>{
+    p.classList.toggle("on", FACE[n].includes(+p.dataset.c));
+  });
+}
+
+/* ---------- 三條路 × 擲骰後果（依史實情境設計，莊重不計分） ---------- */
+const PATHS={
+  A:{name:"A・忍耐配合", color:"#F0A03B",
+     outcomes:[
+       {r:[1,2,3], t:"表面平靜，傷口仍在",
+        x:"衝突暫時避開了，但勞役與屈辱並沒有停止。族人心底的不滿，一點一滴累積起來。"},
+       {r:[4,5,6], t:"安穩之下，疑問漸生",
+        x:"日子看似照常，壓迫卻日益加深。年輕的族人開始私下質疑：難道就這樣下去嗎？"}
+     ]},
+  B:{name:"B・和平陳情", color:"#3E8CB5",
+     outcomes:[
+       {r:[1,2], t:"陳情石沉大海",
+        x:"反映的聲音沒有得到回應，殖民當局並未改變政策，族人感到更深的無力。"},
+       {r:[3,4], t:"表面回應，根本未改",
+        x:"少數要求被應付了一下，但不平等的對待依舊，問題並沒有真正被解決。"},
+       {r:[5,6], t:"一點改善，更緊的監視",
+        x:"爭取到一點點改變，卻換來更嚴密的監視。和平的路，愈走愈窄。"}
+     ]},
+  C:{name:"C・武裝起義", color:"#E25B43",
+     outcomes:[
+       {r:[1,2], t:"消息走漏，準備不及",
+        x:"起事的風聲提前傳出，行動受挫——為尊嚴反抗的代價，極為沉重。"},
+       {r:[3,4], t:"各社響應，旋即遭鎮壓",
+        x:"多個部落一同響應，短暫掌握了局勢；但日方迅速調來優勢兵力強力鎮壓，族人付出慘重傷亡。"},
+       {r:[5,6], t:"力量懸殊，仍奮力一搏",
+        x:"明知雙方實力懸殊，族人仍為尊嚴挺身而起。這場抵抗最終被鎮壓，卻成為後世長久記得的歷史象徵。"}
+     ]}
+};
+
+let chosen=null, lastRoll=null, lastOutcome=null;
+const reflect={diff:"",choose:"",learn:""};
+
+/* ---------- 階段切換 ---------- */
+const STAGES=["s0","s1","s2","s3","s4"];
+function go(i){
+  STAGES.forEach((id,idx)=>document.getElementById(id).classList.toggle("active",idx===i));
+  document.querySelectorAll("#progress .pstep").forEach((el,idx)=>{
+    el.classList.toggle("active",idx===i);
+    el.classList.toggle("done",idx<i);
+  });
+  if(i===2) prepRoll();
+  if(i===4) buildSummary();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ---------- 選路 ---------- */
+document.querySelectorAll(".path").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    chosen=btn.dataset.p;
+    document.querySelectorAll(".path").forEach(b=>b.classList.toggle("sel",b===btn));
+    document.getElementById("toRoll").disabled=false;
+  });
+});
+
+/* ---------- 進入擲骰階段 ---------- */
+function prepRoll(){
+  lastRoll=null;lastOutcome=null;
+  document.getElementById("chosenLine").innerHTML="你選擇了：<b>"+PATHS[chosen].name+"</b>";
+  document.getElementById("outcome").hidden=true;
+  document.getElementById("toReveal").disabled=true;
+  const rb=document.getElementById("rollBtn");
+  rb.disabled=false;rb.textContent="擲骰 🎲";
+  paintDie(1);
+}
+
+/* ---------- 擲骰 ---------- */
+function rollDice(){
+  const die=document.getElementById("die");
+  const rb=document.getElementById("rollBtn");
+  rb.disabled=true;
+  const final=Math.floor(Math.random()*6)+1;
+  const reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+  const settle=()=>{
+    paintDie(final);
+    lastRoll=final;
+    showOutcome(final);
+    rb.textContent="再擲一次 🎲";
+    rb.disabled=false;
+    document.getElementById("toReveal").disabled=false;
+  };
+
+  if(reduce){settle();return;}
+
+  die.classList.add("rolling");
+  let ticks=0;
+  const iv=setInterval(()=>{
+    paintDie(Math.floor(Math.random()*6)+1);
+    ticks++;
+    if(ticks>=11){
+      clearInterval(iv);
+      die.classList.remove("rolling");
+      settle();
+    }
+  },90);
+}
+
+function showOutcome(n){
+  const oc=PATHS[chosen].outcomes.find(o=>o.r.includes(n));
+  lastOutcome=oc;
+  const box=document.getElementById("outcome");
+  document.getElementById("oBadge").textContent="擲出 "+n+"　·　"+PATHS[chosen].name;
+  document.getElementById("oBadge").style.background=PATHS[chosen].color;
+  document.getElementById("oTitle").textContent=oc.t;
+  document.getElementById("oText").textContent=oc.x;
+  box.hidden=false;
+}
+
+/* ---------- 反思摘要 ---------- */
+function buildSummary(){
+  const el=document.getElementById("rsummary");
+  if(chosen&&lastOutcome){
+    el.innerHTML="這一回，你選了 <b>"+PATHS[chosen].name+"</b>，擲出 <b>"+lastRoll+"</b>，情勢發展成「<b>"+lastOutcome.t+"</b>」。";
+  }else{
+    el.innerHTML="（你還沒完成抉擇與擲骰，可以回到前面走一遍。）";
+  }
+}
+
+/* ---------- 反思輸入（記憶體保存） ---------- */
+document.querySelectorAll("textarea[data-r]").forEach(t=>{
+  t.addEventListener("input",()=>reflect[t.dataset.r]=t.value);
+});
+
+/* ---------- 重玩 ---------- */
+function restart(){
+  chosen=null;lastRoll=null;lastOutcome=null;
+  document.querySelectorAll(".path").forEach(b=>b.classList.remove("sel"));
+  document.getElementById("toRoll").disabled=true;
+  go(1);
+}
+</script>
+</body>
+</html>
