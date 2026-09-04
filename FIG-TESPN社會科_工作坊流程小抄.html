@@ -5,65 +5,166 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>工作坊流程小抄 — FIG-TESPN（時間掌控用）</title>
 <style>
+  /* ── FIG-TESPN 教學包・共用設計 token ─────────────────────────────
+     8 份檔案共用同一組。所有顏色一律經此宣告，樣式區不再寫死色值。
+     命名採語意角色：
+       --X        純填色，不承載文字（色條、進度條、圓點、分隔）
+       --X-deep   承載文字用：當紙上文字色，或當底色配 --on-accent
+                  （對最深淺底 --tint-sand 皆 ≥ 4.5:1）
+       --on-accent  置於 -deep／--deep 深填色上的文字（白）
+       --on-warm    置於 --amber／--gold 亮填色上的文字（墨）
+     ------------------------------------------------------------- */
+  /* ── FIG-TESPN 教學包・共用設計 token ─────────────────────────────
+     8 份檔案共用同一組。所有顏色一律經此宣告，樣式區不再寫死色值。
+     命名採語意角色：
+       --X        純填色，不承載文字（色條、進度條、圓點、分隔）
+       --X-deep   承載文字用：當紙上文字色，或當底色配 --on-accent
+                  （對最深淺底 --tint-sand 皆 ≥ 4.5:1）
+       --on-accent  置於 -deep／--deep 深填色上的文字（白）
+       --on-warm    置於 --amber／--gold 亮填色上的文字（墨）
+     ------------------------------------------------------------- */
   :root{
-    --paper:#FBF3E2;--card:#FFFDF8;--ink:#3A2A20;--inkSoft:#86705F;--line:#EAD9BD;
-    --coral:#E25B43;--amber:#F0A03B;--gold:#D9A82E;--green:#5FA463;--teal:#3F9E8E;--sky:#3E8CB5;--deep:#356E9E;--close:#C9743E;
+    /* 字體堆疊 */
+    --font-body:"PingFang TC","Heiti TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    --font-display:Georgia,"Times New Roman",serif;
+    --font-num:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+
+    /* 紙張與墨色 */
+    --paper:#FBF3E2;
+    --paper-hi:#FFFCF4;
+    --paper-lo:#FFF6E6;
+    --card:#FFFDF8;
+    --ink:#3A2A20;
+    --ink-soft:#7C6758;
+    --line:#EAD9BD;
+    --on-accent:#FFFFFF;
+    --on-warm:#3A2A20;
+
+    /* 色相・純填色 */
+    --coral:#E25B43; --amber:#F0A03B; --gold:#D9A82E; --green:#5FA463;
+    --teal:#3F9E8E;  --sky:#3E8CB5;   --deep:#356E9E;  --close:#C9743E;
+
+    /* 色相・承載文字用（--deep 原值已達標，無加深版） */
+    --coral-deep:#C5371E; --amber-deep:#9C5C0C;
+    --green-deep:#437646; --teal-deep:#2F766A;  --sky-deep:#327193;
+    --close-deep:#9F592D;
+
+    /* 淺色調底（皆可承載 --ink 與 --ink-soft） */
+    --tint-warm:#FFF7EC;  --tint-sand:#FBEAD0; --tint-cream:#FBF6EC;
+    --tint-note:#FBF1DE;  --tint-coral:#FDF0E9; --tint-green:#E5F1E6;
+    --tint-teal:#EAF5F2;  --tint-sky:#EEF5F8;   --tint-honey:#FFF7E8;
+    --surface-hover:#FFF1D6;
+    --surface-input:#FFFEFB;
+
+    /* 邊框與陰影（陰影帶墨色相，不用純黑） */
+    --line-coral:#F3C9BC; --line-green:#CFE6D4; --line-sky:#BFDDEC;
+    --shadow-soft:rgba(58,42,32,.12);
+    --shadow-firm:rgba(58,42,32,.16);
+
+    /* 步驟徽章的淡色底（承載 --ink） */
+    --pale-coral:#FBD9CF; --pale-amber:#FCE6C6; --pale-gold:#F6E7B6;
+    --pale-green:#D7EBD9; --pale-teal:#CFE9E3;  --pale-sky:#CFE3EF;
+    --pale-deep:#D0DCEA;  --pale-close:#F1DBC6;
+
+    /* 抬頭光暈（--amber 22% / --green 16%） */
+    --bloom-warm:rgba(240,160,59,.22);
   }
+
+  /* 配色對：填色與其文字色永遠成對，避免白字落在亮暖色上（對比皆 ≥4.5:1） */
+  .sw-coral{background:var(--coral-deep);color:var(--on-accent);}
+  .sw-amber{background:var(--amber);     color:var(--on-warm);}
+  .sw-gold {background:var(--gold);      color:var(--on-warm);}
+  .sw-green{background:var(--green-deep);color:var(--on-accent);}
+  .sw-teal {background:var(--teal-deep); color:var(--on-accent);}
+  .sw-sky  {background:var(--sky-deep);  color:var(--on-accent);}
+  .sw-deep {background:var(--deep);      color:var(--on-accent);}
+  .sw-close{background:var(--close-deep);color:var(--on-accent);}
+
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html,body{margin:0;padding:0;overflow-x:clip;}
   body{background:var(--paper);color:var(--ink);
-    font-family:"PingFang TC","Heiti TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    font-family:var(--font-body);
     line-height:1.5;-webkit-font-smoothing:antialiased;}
   .wrap{max-width:880px;margin:0 auto;padding:20px 20px 36px;}
 
   /* header */
-  header.hd{border:2px solid var(--ink);border-radius:14px;background:linear-gradient(180deg,#FFFCF4,#FFF6E6);
+  header.hd{border:2px solid var(--ink);border-radius:14px;background:linear-gradient(180deg,var(--paper-hi),var(--paper-lo));
     padding:14px 18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
   .htext{flex:1;min-width:200px;}
-  .eyebrow{font-size:.7rem;letter-spacing:.28em;font-weight:700;color:var(--coral);margin:0 0 3px;text-transform:uppercase;}
+  .eyebrow{font-size:.7rem;letter-spacing:.28em;font-weight:700;color:var(--coral-deep);margin:0 0 3px;text-transform:uppercase;}
   h1{margin:0;font-size:1.35rem;font-weight:800;}
-  h1 small{font-size:.8rem;font-weight:700;color:var(--inkSoft);margin-left:8px;}
+  h1 small{font-size:.8rem;font-weight:700;color:var(--ink-soft);margin-left:8px;}
   .totals{display:flex;gap:8px;}
   .tot{border:2px solid var(--ink);border-radius:11px;padding:6px 14px;text-align:center;background:var(--card);}
-  .tot b{display:block;font-family:Georgia,serif;font-size:1.5rem;font-weight:700;line-height:1;color:var(--coral);}
-  .tot span{font-size:.66rem;color:var(--inkSoft);font-weight:700;letter-spacing:.04em;}
-  .tot.s2 b{color:var(--teal);} .tot.s3 b{color:var(--deep);}
+  .tot b{display:block;font-family:var(--font-num);font-variant-numeric:tabular-nums;font-size:1.4rem;letter-spacing:-.02em;font-weight:700;line-height:1;color:var(--coral-deep);}
+  .tot span{font-size:.66rem;color:var(--ink-soft);font-weight:700;letter-spacing:.04em;}
+  .tot.s2 b{color:var(--teal-deep);} .tot.s3 b{color:var(--deep);}
 
   /* checkpoint banner */
   .check{margin:12px 0 0;display:flex;gap:10px;flex-wrap:wrap;}
-  .ckp{flex:1;min-width:150px;border:2px dashed var(--close);border-radius:11px;background:#FFF7EC;padding:8px 12px;font-size:.82rem;}
-  .ckp b{color:var(--close);font-family:Georgia,serif;font-size:1.05rem;}
+  .ckp{flex:1;min-width:150px;border:2px dashed var(--close);border-radius:11px;background:var(--tint-warm);padding:8px 12px;font-size:.82rem;}
+  .ckp b{color:var(--close-deep);font-family:var(--font-num);font-variant-numeric:tabular-nums;font-size:1rem;}
 
   /* table */
   table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.86rem;}
   th,td{border:1px solid var(--line);padding:7px 9px;vertical-align:middle;}
-  thead th{background:#FBEAD0;font-weight:800;font-size:.78rem;letter-spacing:.03em;text-align:left;}
-  .tclock{font-family:Georgia,serif;font-weight:700;white-space:nowrap;width:118px;}
-  .tclock .min{display:block;font-size:.72rem;color:var(--inkSoft);font-weight:400;font-family:inherit;}
+  thead th{background:var(--tint-sand);font-weight:800;font-size:.78rem;letter-spacing:.03em;text-align:left;}
+  .tclock{font-family:var(--font-num);font-variant-numeric:tabular-nums;font-weight:700;font-size:.82rem;white-space:nowrap;width:118px;}
+  .tclock .min{display:block;font-size:.72rem;color:var(--ink-soft);font-weight:400;font-family:inherit;}
   .seg{font-weight:800;white-space:nowrap;}
   .seg .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle;}
-  .pg{font-family:Georgia,serif;font-weight:700;color:var(--inkSoft);text-align:center;width:38px;}
+  .pg{font-family:var(--font-num);font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink-soft);text-align:center;width:38px;}
   .do{font-size:.85rem;}
-  tr.peak td{background:#FDF0E9;}
-  tr.peak .seg{color:var(--coral);}
-  tr.qa td{background:#EEF5F8;}
-  .star{color:var(--coral);font-weight:800;}
+  tr.peak td{background:var(--tint-coral);}
+  tr.peak .seg{color:var(--coral-deep);}
+  tr.qa td{background:var(--tint-sky);}
+  .star{color:var(--coral-deep);font-weight:800;}
 
   /* bottom strip */
   .strip{margin-top:14px;display:grid;grid-template-columns:1.3fr 1fr;gap:10px;}
   .box{border:2px solid var(--ink);border-radius:12px;background:var(--card);padding:11px 14px;}
   .box h3{margin:0 0 6px;font-size:.92rem;}
-  .box h3 .ic{margin-right:6px;}
-  .box.cut{background:#FFF4EE;border-color:var(--coral);}
-  .box.cut h3{color:var(--coral);}
+  .box.cut{background:var(--tint-coral);border-color:var(--coral-deep);}
+  .box.cut h3{color:var(--coral-deep);}
   ul{margin:0;padding-left:18px;font-size:.82rem;}
   ul li{margin:3px 0;}
   .flex{font-size:.82rem;}
   .flex div{padding:4px 0;border-bottom:1px solid var(--line);}
   .flex div:last-child{border-bottom:none;}
-  .flex b{font-family:Georgia,serif;color:var(--deep);}
+  .flex b{font-family:var(--font-num);font-variant-numeric:tabular-nums;color:var(--deep);}
 
-  footer.ft{margin-top:12px;font-size:.74rem;color:var(--inkSoft);text-align:center;}
+  footer.ft{margin-top:12px;font-size:.74rem;color:var(--ink-soft);text-align:center;}
+
+
+  /* ── 手機（≤640px）：四欄時刻表在窄螢幕讀不了，改成一列一張卡 ──
+     版面順序改為　環節＋頁 ／ 時刻 ／ 這段做什麼　——上台掃一眼先看環節。 */
+  @media (max-width:640px){
+    .wrap{padding:16px 14px 28px;}
+    header.hd{gap:12px;padding:12px 14px;}
+    h1{font-size:1.2rem;}
+    h1 small{display:block;margin-left:0;margin-top:2px;}
+    .totals{gap:6px;}
+    .tot{flex:1;min-width:0;padding:6px 8px;}
+
+    table{margin-top:10px;}
+    thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);}
+    table,tbody,tr,td{display:block;}
+    tr{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;
+       border:2px solid var(--ink);border-radius:11px;background:var(--card);
+       padding:9px 12px;margin-bottom:8px;}
+    td{border:none;padding:0;background:none;}
+    tr.peak{background:var(--tint-coral);}
+    tr.qa{background:var(--tint-sky);}
+
+    .seg{order:1;flex:1 1 auto;white-space:normal;font-size:.95rem;}
+    .pg{order:2;flex:none;width:auto;text-align:right;font-size:.8rem;}
+    .pg::before{content:"頁 ";font-family:inherit;font-weight:400;}
+    .tclock{order:3;flex:1 0 100%;width:auto;white-space:normal;font-size:.82rem;color:var(--ink-soft);}
+    .tclock .min{display:inline;margin-left:6px;}
+    .do{order:4;flex:1 0 100%;font-size:.86rem;line-height:1.5;}
+
+    .strip{grid-template-columns:1fr;}
+  }
 
   @media print{
     @page{margin:10mm;}
@@ -90,13 +191,13 @@
   </header>
 
   <div class="check">
-    <div class="ckp">⏱ <b>第 16 分</b>　該開始「親身體驗」了——還沒到體驗，就是講太久，加快。</div>
-    <div class="ckp">⏱ <b>第 33 分</b>　該進入 Q&amp;A 了——留 7 分鐘給交流，別讓問答被吃掉。</div>
+    <div class="ckp"><b>第 16 分</b>　該開始「親身體驗」了——還沒到體驗，就是講太久，加快。</div>
+    <div class="ckp"><b>第 33 分</b>　該進入 Q&amp;A 了——留 7 分鐘給交流，別讓問答被吃掉。</div>
   </div>
 
   <table>
     <thead>
-      <tr><th>⏱ 時刻（累計）</th><th>環節</th><th>頁</th><th>這段做什麼（一句話）</th></tr>
+      <tr><th>時刻（累計）</th><th>環節</th><th>頁</th><th>這段做什麼（一句話）</th></tr>
     </thead>
     <tbody>
       <tr>
@@ -158,7 +259,7 @@
 
   <div class="strip">
     <div class="box cut">
-      <h3><span class="ic">✂️</span>落後了，先砍這些</h3>
+      <h3>落後了，先砍這些</h3>
       <ul>
         <li><b>頁 7 可遷移</b>：改成一句口頭帶過（省 ~2 分）。</li>
         <li><b>頁 6 體驗</b>：只示範一輪、不做小組分享（省 ~5 分）。</li>
@@ -166,7 +267,7 @@
       </ul>
     </div>
     <div class="box">
-      <h3><span class="ic">↔️</span>場次伸縮對照</h3>
+      <h3>場次伸縮對照</h3>
       <div class="flex">
         <div><b>30′</b>　體驗縮到 5 分、砍頁 7、Q&amp;A 3 分</div>
         <div><b>40′</b>　本表標準版</div>

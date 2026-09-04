@@ -5,27 +5,87 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>抉擇現場・莫那魯道 — FIG-TESPN 骰子抉擇（V2）</title>
 <style>
+  /* ── FIG-TESPN 教學包・共用設計 token ─────────────────────────────
+     8 份檔案共用同一組。所有顏色一律經此宣告，樣式區不再寫死色值。
+     命名採語意角色：
+       --X        純填色，不承載文字（色條、進度條、圓點、分隔）
+       --X-deep   承載文字用：當紙上文字色，或當底色配 --on-accent
+                  （對最深淺底 --tint-sand 皆 ≥ 4.5:1）
+       --on-accent  置於 -deep／--deep 深填色上的文字（白）
+       --on-warm    置於 --amber／--gold 亮填色上的文字（墨）
+     ------------------------------------------------------------- */
+  /* ── FIG-TESPN 教學包・共用設計 token ─────────────────────────────
+     8 份檔案共用同一組。所有顏色一律經此宣告，樣式區不再寫死色值。
+     命名採語意角色：
+       --X        純填色，不承載文字（色條、進度條、圓點、分隔）
+       --X-deep   承載文字用：當紙上文字色，或當底色配 --on-accent
+                  （對最深淺底 --tint-sand 皆 ≥ 4.5:1）
+       --on-accent  置於 -deep／--deep 深填色上的文字（白）
+       --on-warm    置於 --amber／--gold 亮填色上的文字（墨）
+     ------------------------------------------------------------- */
   :root{
+    /* 字體堆疊 */
+    --font-body:"PingFang TC","Heiti TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    --font-display:Georgia,"Times New Roman",serif;
+    --font-num:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+
+    /* 紙張與墨色 */
     --paper:#FBF3E2;
+    --paper-hi:#FFFCF4;
+    --paper-lo:#FFF6E6;
     --card:#FFFDF8;
     --ink:#3A2A20;
-    --ink-soft:#86705F;
+    --ink-soft:#7C6758;
     --line:#EAD9BD;
-    --coral:#E25B43;
-    --amber:#F0A03B;
-    --gold:#E4BC3C;
-    --green:#5FA463;
-    --teal:#3F9E8E;
-    --sky:#3E8CB5;
-    --deep:#356E9E;
-    --close:#C9743E;
+    --on-accent:#FFFFFF;
+    --on-warm:#3A2A20;
+
+    /* 色相・純填色 */
+    --coral:#E25B43; --amber:#F0A03B; --gold:#D9A82E; --green:#5FA463;
+    --teal:#3F9E8E;  --sky:#3E8CB5;   --deep:#356E9E;  --close:#C9743E;
+
+    /* 色相・承載文字用（--deep 原值已達標，無加深版） */
+    --coral-deep:#C5371E; --amber-deep:#9C5C0C;
+    --green-deep:#437646; --teal-deep:#2F766A;  --sky-deep:#327193;
+    --close-deep:#9F592D;
+
+    /* 淺色調底（皆可承載 --ink 與 --ink-soft） */
+    --tint-warm:#FFF7EC;  --tint-sand:#FBEAD0; --tint-cream:#FBF6EC;
+    --tint-note:#FBF1DE;  --tint-coral:#FDF0E9; --tint-green:#E5F1E6;
+    --tint-teal:#EAF5F2;  --tint-sky:#EEF5F8;   --tint-honey:#FFF7E8;
+    --surface-hover:#FFF1D6;
+    --surface-input:#FFFEFB;
+
+    /* 邊框與陰影（陰影帶墨色相，不用純黑） */
+    --line-coral:#F3C9BC; --line-green:#CFE6D4; --line-sky:#BFDDEC;
+    --shadow-soft:rgba(58,42,32,.12);
+    --shadow-firm:rgba(58,42,32,.16);
+
+    /* 步驟徽章的淡色底（承載 --ink） */
+    --pale-coral:#FBD9CF; --pale-amber:#FCE6C6; --pale-gold:#F6E7B6;
+    --pale-green:#D7EBD9; --pale-teal:#CFE9E3;  --pale-sky:#CFE3EF;
+    --pale-deep:#D0DCEA;  --pale-close:#F1DBC6;
+
+    /* 抬頭光暈（--amber 22% / --green 16%） */
+    --bloom-warm:rgba(240,160,59,.22);
   }
+
+  /* 配色對：填色與其文字色永遠成對，避免白字落在亮暖色上（對比皆 ≥4.5:1） */
+  .sw-coral{background:var(--coral-deep);color:var(--on-accent);}
+  .sw-amber{background:var(--amber);     color:var(--on-warm);}
+  .sw-gold {background:var(--gold);      color:var(--on-warm);}
+  .sw-green{background:var(--green-deep);color:var(--on-accent);}
+  .sw-teal {background:var(--teal-deep); color:var(--on-accent);}
+  .sw-sky  {background:var(--sky-deep);  color:var(--on-accent);}
+  .sw-deep {background:var(--deep);      color:var(--on-accent);}
+  .sw-close{background:var(--close-deep);color:var(--on-accent);}
+
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
     background:var(--paper);
     color:var(--ink);
-    font-family:"PingFang TC","Heiti TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    font-family:var(--font-body);
     line-height:1.7;
     -webkit-font-smoothing:antialiased;
   }
@@ -34,35 +94,35 @@
   /* ---------- Header ---------- */
   header.hd{
     position:relative;border:2px solid var(--ink);border-radius:18px;
-    background:linear-gradient(180deg,#FFFCF4 0%, #FFF6E6 100%);
+    background:linear-gradient(180deg,var(--paper-hi) 0%, var(--paper-lo) 100%);
     padding:24px 26px 20px;overflow:hidden;
   }
   header.hd::before{
     content:"";position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(circle at 90% -15%, rgba(226,91,67,.20), transparent 44%),
-               radial-gradient(circle at 4% 125%, rgba(62,140,181,.16), transparent 46%);
+    background:radial-gradient(circle at 90% -15%, var(--bloom-warm), transparent 44%);
   }
-  .eyebrow{font-size:.76rem;letter-spacing:.3em;font-weight:700;color:var(--coral);margin:0 0 8px;text-transform:uppercase;}
+  .eyebrow{font-size:.76rem;letter-spacing:.3em;font-weight:700;color:var(--coral-deep);margin:0 0 8px;text-transform:uppercase;}
   h1.title{margin:0;font-size:1.95rem;font-weight:800;line-height:1.25;}
   h1.title small{display:block;font-size:1rem;font-weight:700;color:var(--ink-soft);margin-top:6px;letter-spacing:.04em;}
-  .verbadge{position:absolute;top:18px;right:20px;background:var(--deep);color:#fff;font-weight:800;font-size:.74rem;letter-spacing:.14em;border-radius:999px;padding:4px 13px;}
+  .verbadge{position:absolute;top:18px;right:20px;background:var(--deep);color:var(--on-accent);font-weight:800;font-size:.74rem;letter-spacing:.14em;border-radius:999px;padding:4px 13px;}
   .credit{margin:12px 0 0;font-size:.8rem;color:var(--ink-soft);}
 
   .carebox{
-    margin:16px 0 0;border:2px dashed var(--close);border-radius:12px;background:#FFF6EC;
+    margin:16px 0 0;border:2px dashed var(--close);border-radius:12px;background:var(--tint-warm);
     padding:12px 16px;font-size:.86rem;color:var(--ink);
   }
-  .carebox b{color:var(--close);}
+  .carebox b{color:var(--close-deep);}
 
   /* ---------- Progress ---------- */
   .progress{display:flex;gap:6px;margin:22px 0 10px;flex-wrap:wrap;}
   .pstep{
-    flex:1;min-width:120px;border:2px solid var(--line);border-radius:10px;background:#FFFDF8;
-    padding:8px 10px;font-size:.8rem;color:var(--ink-soft);font-weight:700;text-align:center;transition:.2s;
+    flex:1;min-width:120px;border:2px solid var(--line);border-radius:10px;background:var(--card);
+    padding:8px 10px;font-size:.8rem;color:var(--ink-soft);font-weight:700;text-align:center;
+    transition:background-color .2s ease-out,border-color .2s ease-out,color .2s ease-out;
   }
-  .pstep .k{font-family:Georgia,serif;font-size:.72rem;letter-spacing:.18em;display:block;color:var(--amber);}
+  .pstep .k{font-family:var(--font-display);font-size:.72rem;letter-spacing:.18em;display:block;color:var(--amber-deep);}
   .pstep.active{border-color:var(--ink);background:var(--gold);color:var(--ink);}
-  .pstep.done{border-color:var(--green);background:#E5F1E6;color:#2E4F36;}
+  .pstep.done{border-color:var(--green-deep);background:var(--tint-green);color:var(--green-deep);}
   .pstep.done .k,.pstep.active .k{color:inherit;}
 
   /* ---------- Stage shell ---------- */
@@ -75,13 +135,17 @@
   .stagehead .en{color:var(--ink-soft);font-weight:700;font-size:.8rem;letter-spacing:.1em;}
 
   .narr{font-size:1rem;color:var(--ink);margin:6px 0 0;}
-  .narr strong{color:var(--coral);}
+  .narr strong{color:var(--coral-deep);}
 
   /* FIG mini cards */
-  .figrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;}
-  .figc{border:2px solid var(--ink);border-radius:12px;padding:12px;background:#FFF9EE;}
-  .figc .medal{width:34px;height:34px;border-radius:9px;color:#fff;font-family:Georgia,serif;font-weight:700;font-size:1.2rem;display:grid;place-items:center;margin-bottom:8px;}
-  .figc h3{margin:0 0 4px;font-size:.95rem;}
+  /* F→I→G 是有順序的三步，不是三張並排的等寬卡：改直式清單，徽章與標題同列。
+     同時避免 .panel 內再包一層邊框卡（卡中卡）。 */
+  .figrow{margin-top:16px;border-top:1px solid var(--line);}
+  .figc{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 12px;
+        padding:11px 2px;border-bottom:1px solid var(--line);}
+  .figc .medal{grid-row:span 2;align-self:start;width:30px;height:30px;border-radius:9px;
+        font-family:var(--font-display);font-weight:700;font-size:1.05rem;display:grid;place-items:center;}
+  .figc h3{margin:0;font-size:.96rem;}
   .figc h3 .en{font-size:.7rem;color:var(--ink-soft);font-weight:700;letter-spacing:.08em;margin-left:4px;}
   .figc p{margin:0;font-size:.88rem;color:var(--ink);}
 
@@ -89,30 +153,34 @@
   .sub{font-size:.92rem;color:var(--ink-soft);margin:4px 0 0;}
   .paths{display:grid;gap:12px;margin-top:16px;}
   .path{
-    text-align:left;border:2px solid var(--ink);border-radius:14px;background:#fff;cursor:pointer;
+    text-align:left;border:2px solid var(--ink);border-radius:14px;background:var(--card);cursor:pointer;
     padding:0;overflow:hidden;font:inherit;color:var(--ink);transition:transform .08s,box-shadow .15s;
-    display:flex;
+    display:block;
   }
-  .path:hover{box-shadow:0 4px 0 rgba(0,0,0,.12);transform:translateY(-1px);}
+  .path:hover{box-shadow:0 4px 0 var(--shadow-soft);transform:translateY(-1px);}
   .path:active{transform:translateY(1px);}
-  .path .stripe{width:12px;flex:none;}
-  .path .pin{padding:13px 16px;flex:1;}
-  .path .ptitle{font-weight:800;font-size:1.05rem;}
-  .path .pdesc{font-size:.9rem;color:var(--ink);margin-top:2px;}
-  .path .pval{font-size:.82rem;color:var(--ink-soft);margin-top:6px;}
-  .path .pval b{color:var(--close);}
+  /* 色塊取代原本 12px 側邊粗條（side-stripe card 是常見 AI 版型特徵） */
+  .path .swatch{display:inline-block;width:11px;height:11px;border-radius:3px;
+    margin-right:8px;vertical-align:baseline;}
+  .path .pin{display:block;padding:13px 16px;}
+  /* 這三個是 <span>，原本 margin-top 對 inline 元素無效，三行文字會擠成一段；
+     改為 block 才是 CSS 一直想要的版面。 */
+  .path .ptitle{display:block;font-weight:800;font-size:1.05rem;}
+  .path .pdesc{display:block;font-size:.9rem;color:var(--ink);margin-top:2px;}
+  .path .pval{display:block;font-size:.82rem;color:var(--ink-soft);margin-top:6px;}
+  .path .pval b{color:var(--close-deep);}
   .path.sel{outline:4px solid var(--gold);outline-offset:-2px;}
-  .pA .stripe{background:var(--amber);} .pB .stripe{background:var(--sky);} .pC .stripe{background:var(--coral);}
+  .pA .swatch{background:var(--amber);} .pB .swatch{background:var(--sky);} .pC .swatch{background:var(--coral);}
   .path:focus-visible{outline:4px solid var(--sky);outline-offset:2px;}
 
   /* ---------- Dice ---------- */
   .dicewrap{display:flex;flex-direction:column;align-items:center;gap:14px;margin:10px 0 4px;}
   .chosenline{font-size:.92rem;color:var(--ink-soft);text-align:center;}
-  .chosenline b{color:var(--coral);}
+  .chosenline b{color:var(--coral-deep);}
   .die{
-    width:92px;height:92px;border-radius:18px;background:#fff;border:3px solid var(--ink);
+    width:92px;height:92px;border-radius:18px;background:var(--card);border:3px solid var(--ink);
     display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
-    padding:12px;box-shadow:0 5px 0 rgba(0,0,0,.14);
+    padding:12px;box-shadow:0 5px 0 var(--shadow-firm);
   }
   .die .pip{display:grid;place-items:center;}
   .die .pip::after{content:"";width:15px;height:15px;border-radius:50%;background:var(--ink);transform:scale(0);transition:transform .12s;}
@@ -122,27 +190,27 @@
   .rollnote{font-size:.84rem;color:var(--ink-soft);text-align:center;max-width:46ch;}
 
   /* outcome */
-  .outcome{margin-top:4px;border:2px solid var(--ink);border-radius:14px;padding:16px 18px;background:#FFF9EE;}
-  .outcome .obadge{display:inline-block;font-size:.74rem;font-weight:800;letter-spacing:.1em;color:#fff;border-radius:999px;padding:3px 12px;margin-bottom:8px;}
+  .outcome{margin-top:4px;border:2px solid var(--ink);border-radius:14px;padding:16px 18px;background:var(--tint-honey);}
+  .outcome .obadge{display:inline-block;font-size:.74rem;font-weight:800;letter-spacing:.1em;border-radius:999px;padding:3px 12px;margin-bottom:8px;}
   .outcome h3{margin:0 0 6px;font-size:1.1rem;}
   .outcome p{margin:0;font-size:.96rem;}
 
   /* history reveal */
-  .reveal{border-left:6px solid var(--coral);background:#FFF4EE;border-radius:0 12px 12px 0;padding:14px 18px;margin-top:12px;}
-  .reveal h3{margin:0 0 6px;color:var(--coral);font-size:1.05rem;}
+  .reveal{border:1px solid var(--line-coral);background:var(--tint-coral);border-radius:12px;padding:14px 18px;margin-top:12px;}
+  .reveal h3{margin:0 0 6px;color:var(--coral-deep);font-size:1.05rem;}
   .reveal p{margin:0 0 6px;font-size:.95rem;}
   .reveal p:last-child{margin-bottom:0;}
 
   /* reflection */
-  .rsummary{background:#EAF3F8;border:1.5px solid #BFDDEC;border-radius:12px;padding:12px 16px;font-size:.92rem;margin-bottom:14px;}
+  .rsummary{background:var(--tint-sky);border:1.5px solid var(--line-sky);border-radius:12px;padding:12px 16px;font-size:.92rem;margin-bottom:14px;}
   .rsummary b{color:var(--deep);}
   .rq{font-weight:800;margin:14px 0 6px;font-size:.98rem;}
-  .rq .sel{font-size:.72rem;font-weight:800;color:#fff;background:var(--teal);border-radius:999px;padding:2px 9px;margin-left:6px;letter-spacing:.06em;}
+  .rq .sel{font-size:.72rem;font-weight:800;color:var(--on-accent);background:var(--teal-deep);border-radius:999px;padding:2px 9px;margin-left:6px;letter-spacing:.06em;}
   textarea{
     width:100%;min-height:64px;resize:vertical;border:1.5px solid var(--line);border-radius:10px;
-    padding:10px 12px;font:inherit;font-size:.95rem;line-height:1.6;background:#FFFEFB;color:var(--ink);
+    padding:10px 12px;font:inherit;font-size:.95rem;line-height:1.6;background:var(--surface-input);color:var(--ink);
   }
-  textarea:focus-visible{outline:3px solid var(--sky);outline-offset:1px;border-color:var(--sky);}
+  textarea:focus-visible{outline:3px solid var(--sky);outline-offset:1px;border-color:var(--sky-deep);}
 
   /* nav buttons */
   .nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
@@ -152,20 +220,19 @@
   }
   button.btn:active{transform:translateY(1px);}
   button.btn:focus-visible{outline:3px solid var(--sky);outline-offset:2px;}
-  .btn.primary{background:var(--coral);color:#fff;}
-  .btn.primary:hover{background:#d24d36;}
+  .btn.primary{background:var(--coral-deep);color:var(--on-accent);}
+  .btn.primary:hover{background:var(--coral-deep);}
   .btn.ghost{background:var(--card);color:var(--ink);}
-  .btn.ghost:hover{background:#FFF1D6;}
-  .btn.go{background:var(--green);color:#fff;}
-  .btn.go:hover{background:#52955a;}
+  .btn.ghost:hover{background:var(--surface-hover);}
+  .btn.go{background:var(--green-deep);color:var(--on-accent);}
+  .btn.go:hover{background:var(--green-deep);}
   .btn:disabled{opacity:.4;cursor:not-allowed;}
 
   footer.ft{margin-top:30px;font-size:.8rem;color:var(--ink-soft);text-align:center;line-height:1.8;}
-  footer.ft b{color:var(--coral);}
+  footer.ft b{color:var(--coral-deep);}
 
   @media (max-width:600px){
     h1.title{font-size:1.55rem;}
-    .figrow{grid-template-columns:1fr;}
     .verbadge{position:static;display:inline-block;margin-bottom:8px;}
   }
   @media print{
@@ -215,17 +282,17 @@
       </p>
       <div class="figrow">
         <div class="figc">
-          <div class="medal" style="background:var(--coral)">F</div>
+          <div class="medal sw-coral">F</div>
           <h3>他的感受 <span class="en">Feelings</span></h3>
           <p>屈辱與憤怒，還有對族人未來的深深憂慮。</p>
         </div>
         <div class="figc">
-          <div class="medal" style="background:var(--amber)">I</div>
+          <div class="medal sw-amber">I</div>
           <h3>真正的問題 <span class="en">Identify</span></h3>
           <p>族人長期被壓迫、尊嚴受損，和平管道一次次無法改變現況。</p>
         </div>
         <div class="figc">
-          <div class="medal" style="background:var(--gold)">G</div>
+          <div class="medal sw-gold">G</div>
           <h3>他的目標 <span class="en">Goals</span></h3>
           <p>守護族人的尊嚴、文化與生存。</p>
         </div>
@@ -243,25 +310,22 @@
       <p class="sub">莫那魯道至少有三條路可以走。<b>選一條</b>——他若這樣選，他重視的是什麼？</p>
       <div class="paths" id="paths">
         <button class="path pA" data-p="A">
-          <span class="stripe"></span>
           <span class="pin">
-            <span class="ptitle">A・忍耐配合</span>
+            <span class="ptitle"><span class="swatch"></span>A・忍耐配合</span>
             <span class="pdesc">壓下怒火，先求一時的平安。</span>
             <span class="pval">他若選這條，重視的是 <b>眼前的安全</b>。</span>
           </span>
         </button>
         <button class="path pB" data-p="B">
-          <span class="stripe"></span>
           <span class="pin">
-            <span class="ptitle">B・和平陳情</span>
+            <span class="ptitle"><span class="swatch"></span>B・和平陳情</span>
             <span class="pdesc">透過管道反映、繼續溝通爭取。</span>
             <span class="pval">他若選這條，重視的是 <b>不流血的改變</b>。</span>
           </span>
         </button>
         <button class="path pC" data-p="C">
-          <span class="stripe"></span>
           <span class="pin">
-            <span class="ptitle">C・武裝起義</span>
+            <span class="ptitle"><span class="swatch"></span>C・武裝起義</span>
             <span class="pdesc">聯合各社，為尊嚴反抗到底。</span>
             <span class="pval">他若選這條，重視的是 <b>族人的尊嚴</b>。</span>
           </span>
@@ -286,7 +350,7 @@
           <span class="pip" data-c="7"></span><span class="pip" data-c="8"></span><span class="pip" data-c="9"></span>
         </div>
         <p class="rollnote">骰子代表你<b>無法完全掌控的變數</b>：其他社是否響應、消息是否走漏、日方如何反應……</p>
-        <button class="btn primary" id="rollBtn" onclick="rollDice()">擲骰 🎲</button>
+        <button class="btn primary" id="rollBtn" onclick="rollDice()">擲骰</button>
       </div>
       <div class="outcome" id="outcome" hidden aria-live="polite">
         <span class="obadge" id="oBadge"></span>
@@ -359,14 +423,14 @@ function paintDie(n){
 
 /* ---------- 三條路 × 擲骰後果（依史實情境設計，莊重不計分） ---------- */
 const PATHS={
-  A:{name:"A・忍耐配合", color:"#F0A03B",
+  A:{name:"A・忍耐配合", sw:"sw-amber",
      outcomes:[
        {r:[1,2,3], t:"表面平靜，傷口仍在",
         x:"衝突暫時避開了，但勞役與屈辱並沒有停止。族人心底的不滿，一點一滴累積起來。"},
        {r:[4,5,6], t:"安穩之下，疑問漸生",
         x:"日子看似照常，壓迫卻日益加深。年輕的族人開始私下質疑：難道就這樣下去嗎？"}
      ]},
-  B:{name:"B・和平陳情", color:"#3E8CB5",
+  B:{name:"B・和平陳情", sw:"sw-sky",
      outcomes:[
        {r:[1,2], t:"陳情石沉大海",
         x:"反映的聲音沒有得到回應，殖民當局並未改變政策，族人感到更深的無力。"},
@@ -375,7 +439,7 @@ const PATHS={
        {r:[5,6], t:"一點改善，更緊的監視",
         x:"爭取到一點點改變，卻換來更嚴密的監視。和平的路，愈走愈窄。"}
      ]},
-  C:{name:"C・武裝起義", color:"#E25B43",
+  C:{name:"C・武裝起義", sw:"sw-coral",
      outcomes:[
        {r:[1,2], t:"消息走漏，準備不及",
         x:"起事的風聲提前傳出，行動受挫——為尊嚴反抗的代價，極為沉重。"},
@@ -418,7 +482,7 @@ function prepRoll(){
   document.getElementById("outcome").hidden=true;
   document.getElementById("toReveal").disabled=true;
   const rb=document.getElementById("rollBtn");
-  rb.disabled=false;rb.textContent="擲骰 🎲";
+  rb.disabled=false;rb.textContent="擲骰";
   paintDie(1);
 }
 
@@ -434,7 +498,7 @@ function rollDice(){
     paintDie(final);
     lastRoll=final;
     showOutcome(final);
-    rb.textContent="再擲一次 🎲";
+    rb.textContent="再擲一次";
     rb.disabled=false;
     document.getElementById("toReveal").disabled=false;
   };
@@ -459,7 +523,7 @@ function showOutcome(n){
   lastOutcome=oc;
   const box=document.getElementById("outcome");
   document.getElementById("oBadge").textContent="擲出 "+n+"　·　"+PATHS[chosen].name;
-  document.getElementById("oBadge").style.background=PATHS[chosen].color;
+  document.getElementById("oBadge").className="obadge "+PATHS[chosen].sw;
   document.getElementById("oTitle").textContent=oc.t;
   document.getElementById("oText").textContent=oc.x;
   box.hidden=false;

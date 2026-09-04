@@ -5,16 +5,86 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>教師引導提問單 — 莫那魯道骰子抉擇（V2）</title>
 <style>
+  /* ── FIG-TESPN 教學包・共用設計 token ─────────────────────────────
+     8 份檔案共用同一組。所有顏色一律經此宣告，樣式區不再寫死色值。
+     命名採語意角色：
+       --X        純填色，不承載文字（色條、進度條、圓點、分隔）
+       --X-deep   承載文字用：當紙上文字色，或當底色配 --on-accent
+                  （對最深淺底 --tint-sand 皆 ≥ 4.5:1）
+       --on-accent  置於 -deep／--deep 深填色上的文字（白）
+       --on-warm    置於 --amber／--gold 亮填色上的文字（墨）
+     ------------------------------------------------------------- */
+  /* ── FIG-TESPN 教學包・共用設計 token ─────────────────────────────
+     8 份檔案共用同一組。所有顏色一律經此宣告，樣式區不再寫死色值。
+     命名採語意角色：
+       --X        純填色，不承載文字（色條、進度條、圓點、分隔）
+       --X-deep   承載文字用：當紙上文字色，或當底色配 --on-accent
+                  （對最深淺底 --tint-sand 皆 ≥ 4.5:1）
+       --on-accent  置於 -deep／--deep 深填色上的文字（白）
+       --on-warm    置於 --amber／--gold 亮填色上的文字（墨）
+     ------------------------------------------------------------- */
   :root{
-    --paper:#FBF3E2; --card:#FFFDF8; --ink:#3A2A20; --ink-soft:#86705F; --line:#EAD9BD;
-    --coral:#E25B43; --amber:#F0A03B; --gold:#E4BC3C; --green:#5FA463; --teal:#3F9E8E;
-    --sky:#3E8CB5; --deep:#356E9E; --close:#C9743E;
+    /* 字體堆疊 */
+    --font-body:"PingFang TC","Heiti TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    --font-display:Georgia,"Times New Roman",serif;
+    --font-num:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+
+    /* 紙張與墨色 */
+    --paper:#FBF3E2;
+    --paper-hi:#FFFCF4;
+    --paper-lo:#FFF6E6;
+    --card:#FFFDF8;
+    --ink:#3A2A20;
+    --ink-soft:#7C6758;
+    --line:#EAD9BD;
+    --on-accent:#FFFFFF;
+    --on-warm:#3A2A20;
+
+    /* 色相・純填色 */
+    --coral:#E25B43; --amber:#F0A03B; --gold:#D9A82E; --green:#5FA463;
+    --teal:#3F9E8E;  --sky:#3E8CB5;   --deep:#356E9E;  --close:#C9743E;
+
+    /* 色相・承載文字用（--deep 原值已達標，無加深版） */
+    --coral-deep:#C5371E; --amber-deep:#9C5C0C;
+    --green-deep:#437646; --teal-deep:#2F766A;  --sky-deep:#327193;
+    --close-deep:#9F592D;
+
+    /* 淺色調底（皆可承載 --ink 與 --ink-soft） */
+    --tint-warm:#FFF7EC;  --tint-sand:#FBEAD0; --tint-cream:#FBF6EC;
+    --tint-note:#FBF1DE;  --tint-coral:#FDF0E9; --tint-green:#E5F1E6;
+    --tint-teal:#EAF5F2;  --tint-sky:#EEF5F8;   --tint-honey:#FFF7E8;
+    --surface-hover:#FFF1D6;
+    --surface-input:#FFFEFB;
+
+    /* 邊框與陰影（陰影帶墨色相，不用純黑） */
+    --line-coral:#F3C9BC; --line-green:#CFE6D4; --line-sky:#BFDDEC;
+    --shadow-soft:rgba(58,42,32,.12);
+    --shadow-firm:rgba(58,42,32,.16);
+
+    /* 步驟徽章的淡色底（承載 --ink） */
+    --pale-coral:#FBD9CF; --pale-amber:#FCE6C6; --pale-gold:#F6E7B6;
+    --pale-green:#D7EBD9; --pale-teal:#CFE9E3;  --pale-sky:#CFE3EF;
+    --pale-deep:#D0DCEA;  --pale-close:#F1DBC6;
+
+    /* 抬頭光暈（--amber 22% / --green 16%） */
+    --bloom-warm:rgba(240,160,59,.22);
   }
+
+  /* 配色對：填色與其文字色永遠成對，避免白字落在亮暖色上（對比皆 ≥4.5:1） */
+  .sw-coral{background:var(--coral-deep);color:var(--on-accent);}
+  .sw-amber{background:var(--amber);     color:var(--on-warm);}
+  .sw-gold {background:var(--gold);      color:var(--on-warm);}
+  .sw-green{background:var(--green-deep);color:var(--on-accent);}
+  .sw-teal {background:var(--teal-deep); color:var(--on-accent);}
+  .sw-sky  {background:var(--sky-deep);  color:var(--on-accent);}
+  .sw-deep {background:var(--deep);      color:var(--on-accent);}
+  .sw-close{background:var(--close-deep);color:var(--on-accent);}
+
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
     background:var(--paper);color:var(--ink);
-    font-family:"PingFang TC","Heiti TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    font-family:var(--font-body);
     line-height:1.65;-webkit-font-smoothing:antialiased;
   }
   .wrap{max-width:860px;margin:0 auto;padding:26px 20px 70px;}
@@ -22,81 +92,84 @@
   /* Header */
   header.hd{
     position:relative;border:2px solid var(--ink);border-radius:18px;overflow:hidden;
-    background:linear-gradient(180deg,#FFFCF4 0%,#FFF6E6 100%);padding:24px 26px 20px;
+    background:linear-gradient(180deg,var(--paper-hi) 0%,var(--paper-lo) 100%);padding:24px 26px 20px;
   }
   header.hd::before{content:"";position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(circle at 90% -15%,rgba(240,160,59,.22),transparent 44%),
-               radial-gradient(circle at 4% 125%,rgba(95,164,99,.16),transparent 46%);}
-  .verbadge{position:absolute;top:18px;right:20px;background:var(--green);color:#fff;font-weight:800;font-size:.72rem;letter-spacing:.12em;border-radius:999px;padding:4px 13px;}
-  .eyebrow{font-size:.76rem;letter-spacing:.3em;font-weight:700;color:var(--coral);margin:0 0 8px;text-transform:uppercase;}
+    background:radial-gradient(circle at 90% -15%,var(--bloom-warm),transparent 44%);}
+  .verbadge{position:absolute;top:18px;right:20px;background:var(--green-deep);color:var(--on-accent);font-weight:800;font-size:.72rem;letter-spacing:.12em;border-radius:999px;padding:4px 13px;}
+  .eyebrow{font-size:.76rem;letter-spacing:.3em;font-weight:700;color:var(--coral-deep);margin:0 0 8px;text-transform:uppercase;}
   h1.title{margin:0;font-size:1.85rem;font-weight:800;line-height:1.25;}
   h1.title small{display:block;font-size:.98rem;font-weight:700;color:var(--ink-soft);margin-top:6px;letter-spacing:.03em;}
   .credit{margin:11px 0 0;font-size:.8rem;color:var(--ink-soft);}
 
   /* Intro */
-  .intro{margin-top:16px;border:2px dashed var(--close);border-radius:14px;background:#FFF7EC;padding:16px 18px;}
-  .intro h2{margin:0 0 8px;font-size:1rem;color:var(--close);}
+  .intro{margin-top:16px;border:2px dashed var(--close);border-radius:14px;background:var(--tint-warm);padding:16px 18px;}
+  .intro h2{margin:0 0 8px;font-size:1rem;color:var(--close-deep);}
   .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:.86rem;font-weight:700;margin:0 0 10px;}
   .legend span{display:inline-flex;align-items:center;gap:6px;}
-  .mk{font-family:Georgia,serif;font-weight:700;}
-  .mk.must{color:var(--coral);} .mk.opt{color:var(--sky);}
+  .mk{font-family:var(--font-display);font-weight:700;}
+  .mk.must{color:var(--coral-deep);} .mk.opt{color:var(--sky-deep);}
   .intro ul{margin:6px 0 0;padding-left:20px;font-size:.88rem;}
   .intro li{margin:3px 0;}
 
   /* Stage block */
   .stage{margin-top:22px;border:2px solid var(--ink);border-radius:16px;background:var(--card);overflow:hidden;}
-  .sbar{padding:12px 18px;color:#fff;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
-  .sbar .num{font-family:Georgia,serif;font-weight:700;font-size:1.4rem;line-height:1;}
+  .sbar{padding:12px 18px;color:var(--on-accent);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  .sbar .num{font-family:var(--font-display);font-weight:700;font-size:1.4rem;line-height:1;}
   .sbar h2{margin:0;font-size:1.2rem;font-weight:800;}
-  .sbar .fg{font-family:Georgia,serif;font-size:.78rem;letter-spacing:.14em;opacity:.92;}
-  .sbar .sel{margin-left:auto;font-size:.72rem;font-weight:800;background:rgba(255,255,255,.25);border-radius:999px;padding:3px 11px;letter-spacing:.04em;}
-  .s1 .sbar{background:var(--coral);} .s2 .sbar{background:var(--gold);color:var(--ink);}
-  .s2 .sbar .sel{background:rgba(58,42,32,.16);}
-  .s3 .sbar{background:var(--teal);} .s4 .sbar{background:var(--deep);}
+  .sbar .fg{font-family:var(--font-display);font-size:.78rem;letter-spacing:.14em;opacity:.92;}
+  /* 反白膠囊：淺底 + 該段深色字，取代原本半透明白（對比僅約 3.3:1） */
+  .sbar .sel{margin-left:auto;font-size:.72rem;font-weight:800;background:var(--on-accent);border-radius:999px;padding:3px 11px;letter-spacing:.04em;}
+  .s1 .sbar{background:var(--coral-deep);} .s1 .sbar .sel{color:var(--coral-deep);}
+  .s2 .sbar{background:var(--gold);color:var(--ink);} .s2 .sbar .sel{background:var(--ink);color:var(--on-accent);}
+  .s3 .sbar{background:var(--teal-deep);} .s3 .sbar .sel{color:var(--teal-deep);}
+  .s4 .sbar{background:var(--deep);}      .s4 .sbar .sel{color:var(--deep);}
   .sbody{padding:14px 18px 18px;}
 
   ul.q{list-style:none;margin:0;padding:0;}
   ul.q li{position:relative;padding:5px 0 5px 26px;font-size:.95rem;}
-  ul.q li::before{position:absolute;left:0;top:5px;font-family:Georgia,serif;font-weight:700;}
-  ul.q li.must::before{content:"◆";color:var(--coral);}
-  ul.q li.opt::before{content:"○";color:var(--sky);}
+  ul.q li::before{position:absolute;left:0;top:5px;font-family:var(--font-display);font-weight:700;}
+  ul.q li.must::before{content:"◆";color:var(--coral-deep);}
+  ul.q li.opt::before{content:"○";color:var(--sky-deep);}
   ul.q li.must{font-weight:600;}
-  .note{font-size:.85rem;color:var(--ink-soft);background:#FBF1DE;border-radius:8px;padding:8px 12px;margin-top:10px;}
-  .note b{color:var(--close);}
+  .note{font-size:.85rem;color:var(--ink-soft);background:var(--tint-note);border-radius:8px;padding:8px 12px;margin-top:10px;}
+  .note b{color:var(--close-deep);}
 
   /* Path cards in stage 3 */
-  .pathblk{border:2px solid var(--ink);border-radius:12px;overflow:hidden;margin-top:12px;display:flex;}
-  .pathblk .stripe{width:12px;flex:none;}
-  .pathblk .pbody{padding:11px 15px;flex:1;}
+  .pathblk{border:2px solid var(--ink);border-radius:12px;overflow:hidden;margin-top:12px;}
+  /* 色塊取代原本 12px 側邊粗條 */
+  .pathblk .swatch{display:inline-block;width:11px;height:11px;border-radius:3px;
+    margin-right:8px;vertical-align:baseline;}
+  .pathblk .pbody{padding:11px 15px;}
   .pathblk h3{margin:0 0 2px;font-size:1rem;}
   .pathblk .res{font-size:.8rem;color:var(--ink-soft);margin:0 0 8px;}
-  .pA .stripe{background:var(--amber);} .pB .stripe{background:var(--sky);} .pC .stripe{background:var(--coral);}
+  .pA .swatch{background:var(--amber);} .pB .swatch{background:var(--sky);} .pC .swatch{background:var(--coral);}
 
-  .dicebox{margin-top:14px;border:2px solid var(--teal);border-radius:12px;background:#EAF5F2;padding:13px 16px;}
-  .dicebox h3{margin:0 0 6px;font-size:1rem;color:#2C6157;display:flex;align-items:center;gap:8px;}
-  .dicebox ul.q li.must::before{color:#2C6157;}
+  .dicebox{margin-top:14px;border:2px solid var(--teal);border-radius:12px;background:var(--tint-teal);padding:13px 16px;}
+  .dicebox h3{margin:0 0 6px;font-size:1rem;color:var(--teal-deep);display:flex;align-items:center;gap:8px;}
+  .dicebox ul.q li.must::before{color:var(--teal-deep);}
 
   /* Closing */
   .closing{margin-top:22px;border:2px solid var(--ink);border-radius:16px;overflow:hidden;background:var(--card);}
-  .closing .ch{background:var(--close);color:#fff;padding:13px 18px;font-weight:800;font-size:1.2rem;}
+  .closing .ch{background:var(--close-deep);color:var(--on-accent);padding:13px 18px;font-weight:800;font-size:1.2rem;}
   .closing .cb{padding:6px 18px 18px;}
   .part{padding:12px 0;border-bottom:1px solid var(--line);}
   .part:last-child{border-bottom:none;}
   .part h3{margin:0 0 6px;font-size:1.02rem;}
-  .part h3 .n{display:inline-grid;place-items:center;width:24px;height:24px;background:var(--close);color:#fff;border-radius:7px;font-size:.85rem;font-weight:800;margin-right:8px;font-family:Georgia,serif;}
-  .oneliner{background:#FFF4E6;border:1.5px dashed var(--close);border-radius:10px;padding:10px 14px;font-size:.95rem;margin-top:6px;}
-  .oneliner b{color:var(--close);}
-  .closer{margin-top:14px;font-size:.95rem;background:#FBF6EC;border-left:5px solid var(--coral);border-radius:0 10px 10px 0;padding:12px 16px;}
-  .closer b{color:var(--coral);}
+  .part h3 .n{display:inline-grid;place-items:center;width:24px;height:24px;background:var(--close-deep);color:var(--on-accent);border-radius:7px;font-size:.85rem;font-weight:800;margin-right:8px;font-family:var(--font-display);}
+  .oneliner{background:var(--tint-honey);border:1.5px dashed var(--close);border-radius:10px;padding:10px 14px;font-size:.95rem;margin-top:6px;}
+  .oneliner b{color:var(--close-deep);}
+  .closer{margin-top:14px;font-size:.95rem;background:var(--tint-cream);border:1px solid var(--line);border-radius:10px;padding:12px 16px;}
+  .closer b{color:var(--coral-deep);}
 
   /* SEL footer */
   table.sel{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:22px;}
   table.sel caption{text-align:left;font-weight:800;font-size:.95rem;margin-bottom:8px;color:var(--ink);}
   table.sel th,table.sel td{border:1px solid var(--line);padding:7px 10px;text-align:left;}
-  table.sel th{background:#FBEAD0;width:32%;font-weight:800;}
+  table.sel th{background:var(--tint-sand);width:32%;font-weight:800;}
 
   footer.ft{margin-top:24px;font-size:.78rem;color:var(--ink-soft);text-align:center;line-height:1.8;}
-  footer.ft b{color:var(--coral);}
+  footer.ft b{color:var(--coral-deep);}
 
   @media (max-width:600px){
     h1.title{font-size:1.5rem;}
@@ -171,9 +244,8 @@
     <div class="sbody">
 
       <div class="pathblk pA">
-        <span class="stripe"></span>
         <div class="pbody">
-          <h3>路 A・忍耐配合</h3>
+          <h3><span class="swatch"></span>路 A・忍耐配合</h3>
           <p class="res">遊戲後果：表面平靜，傷口仍在／安穩之下，疑問漸生</p>
           <ul class="q">
             <li class="must">表面上沒有衝突了，但「沒有衝突」就等於「問題解決了」嗎？</li>
@@ -185,9 +257,8 @@
       </div>
 
       <div class="pathblk pB">
-        <span class="stripe"></span>
         <div class="pbody">
-          <h3>路 B・和平陳情</h3>
+          <h3><span class="swatch"></span>路 B・和平陳情</h3>
           <p class="res">遊戲後果：石沉大海／表面回應／一點改善換來更緊的監視</p>
           <ul class="q">
             <li class="must">和平溝通是最理想的方式，但為什麼這條路常常「沒有用」？問題出在誰身上？</li>
@@ -199,9 +270,8 @@
       </div>
 
       <div class="pathblk pC">
-        <span class="stripe"></span>
         <div class="pbody">
-          <h3>路 C・武裝起義</h3>
+          <h3><span class="swatch"></span>路 C・武裝起義</h3>
           <p class="res">遊戲後果：消息走漏／旋即遭鎮壓／力量懸殊仍奮力一搏</p>
           <ul class="q">
             <li class="must">莫那魯道幾乎知道自己會失敗，為什麼還是選擇反抗？（理解：有些價值比輸贏更重要）</li>
@@ -214,7 +284,7 @@
       </div>
 
       <div class="dicebox">
-        <h3>🎲 關於「骰子」的關鍵追問（跨三條路）</h3>
+        <h3>關於「骰子」的關鍵追問（跨三條路）</h3>
         <ul class="q">
           <li class="must">為什麼遊戲要用骰子？真實人生做決定時，我們能完全控制結果嗎？</li>
           <li class="must">既然結果無法完全掌控，那做決定時我們<b>真正能掌握的是什麼</b>？</li>

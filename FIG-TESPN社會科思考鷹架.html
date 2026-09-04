@@ -5,29 +5,87 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>歷史抉擇現場 — FIG-TESPN 社會科思考鷹架</title>
 <style>
+  /* ── FIG-TESPN 教學包・共用設計 token ─────────────────────────────
+     8 份檔案共用同一組。所有顏色一律經此宣告，樣式區不再寫死色值。
+     命名採語意角色：
+       --X        純填色，不承載文字（色條、進度條、圓點、分隔）
+       --X-deep   承載文字用：當紙上文字色，或當底色配 --on-accent
+                  （對最深淺底 --tint-sand 皆 ≥ 4.5:1）
+       --on-accent  置於 -deep／--deep 深填色上的文字（白）
+       --on-warm    置於 --amber／--gold 亮填色上的文字（墨）
+     ------------------------------------------------------------- */
+  /* ── FIG-TESPN 教學包・共用設計 token ─────────────────────────────
+     8 份檔案共用同一組。所有顏色一律經此宣告，樣式區不再寫死色值。
+     命名採語意角色：
+       --X        純填色，不承載文字（色條、進度條、圓點、分隔）
+       --X-deep   承載文字用：當紙上文字色，或當底色配 --on-accent
+                  （對最深淺底 --tint-sand 皆 ≥ 4.5:1）
+       --on-accent  置於 -deep／--deep 深填色上的文字（白）
+       --on-warm    置於 --amber／--gold 亮填色上的文字（墨）
+     ------------------------------------------------------------- */
   :root{
+    /* 字體堆疊 */
+    --font-body:"PingFang TC","Heiti TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    --font-display:Georgia,"Times New Roman",serif;
+    --font-num:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+
+    /* 紙張與墨色 */
     --paper:#FBF3E2;
+    --paper-hi:#FFFCF4;
+    --paper-lo:#FFF6E6;
     --card:#FFFDF8;
     --ink:#3A2A20;
-    --ink-soft:#86705F;
+    --ink-soft:#7C6758;
     --line:#EAD9BD;
-    --coral:#E25B43;
-    --amber:#F0A03B;
-    --gold:#E4BC3C;
-    --green:#5FA463;
-    --teal:#3F9E8E;
-    --sky:#3E8CB5;
-    --deep:#356E9E;
-    --close:#C9743E;
-    --fig:#FBE7C8;
-    --tespn:#E2EFE6;
+    --on-accent:#FFFFFF;
+    --on-warm:#3A2A20;
+
+    /* 色相・純填色 */
+    --coral:#E25B43; --amber:#F0A03B; --gold:#D9A82E; --green:#5FA463;
+    --teal:#3F9E8E;  --sky:#3E8CB5;   --deep:#356E9E;  --close:#C9743E;
+
+    /* 色相・承載文字用（--deep 原值已達標，無加深版） */
+    --coral-deep:#C5371E; --amber-deep:#9C5C0C;
+    --green-deep:#437646; --teal-deep:#2F766A;  --sky-deep:#327193;
+    --close-deep:#9F592D;
+
+    /* 淺色調底（皆可承載 --ink 與 --ink-soft） */
+    --tint-warm:#FFF7EC;  --tint-sand:#FBEAD0; --tint-cream:#FBF6EC;
+    --tint-note:#FBF1DE;  --tint-coral:#FDF0E9; --tint-green:#E5F1E6;
+    --tint-teal:#EAF5F2;  --tint-sky:#EEF5F8;   --tint-honey:#FFF7E8;
+    --surface-hover:#FFF1D6;
+    --surface-input:#FFFEFB;
+
+    /* 邊框與陰影（陰影帶墨色相，不用純黑） */
+    --line-coral:#F3C9BC; --line-green:#CFE6D4; --line-sky:#BFDDEC;
+    --shadow-soft:rgba(58,42,32,.12);
+    --shadow-firm:rgba(58,42,32,.16);
+
+    /* 步驟徽章的淡色底（承載 --ink） */
+    --pale-coral:#FBD9CF; --pale-amber:#FCE6C6; --pale-gold:#F6E7B6;
+    --pale-green:#D7EBD9; --pale-teal:#CFE9E3;  --pale-sky:#CFE3EF;
+    --pale-deep:#D0DCEA;  --pale-close:#F1DBC6;
+
+    /* 抬頭光暈（--amber 22% / --green 16%） */
+    --bloom-warm:rgba(240,160,59,.22);
   }
+
+  /* 配色對：填色與其文字色永遠成對，避免白字落在亮暖色上（對比皆 ≥4.5:1） */
+  .sw-coral{background:var(--coral-deep);color:var(--on-accent);}
+  .sw-amber{background:var(--amber);     color:var(--on-warm);}
+  .sw-gold {background:var(--gold);      color:var(--on-warm);}
+  .sw-green{background:var(--green-deep);color:var(--on-accent);}
+  .sw-teal {background:var(--teal-deep); color:var(--on-accent);}
+  .sw-sky  {background:var(--sky-deep);  color:var(--on-accent);}
+  .sw-deep {background:var(--deep);      color:var(--on-accent);}
+  .sw-close{background:var(--close-deep);color:var(--on-accent);}
+
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
     background:var(--paper);
     color:var(--ink);
-    font-family:"PingFang TC","Heiti TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    font-family:var(--font-body);
     line-height:1.7;
     -webkit-font-smoothing:antialiased;
   }
@@ -39,20 +97,19 @@
     border:2px solid var(--ink);
     border-radius:18px;
     background:
-      linear-gradient(180deg,#FFFCF4 0%, #FFF6E6 100%);
+      linear-gradient(180deg,var(--paper-hi) 0%, var(--paper-lo) 100%);
     padding:26px 26px 22px;
     overflow:hidden;
   }
   header.hd::before{
     content:"";position:absolute;inset:0;
     background:
-      radial-gradient(circle at 88% -10%, rgba(240,160,59,.22), transparent 42%),
-      radial-gradient(circle at 8% 120%, rgba(95,164,99,.18), transparent 45%);
+      radial-gradient(circle at 88% -10%, var(--bloom-warm), transparent 42%);
     pointer-events:none;
   }
   .eyebrow{
     font-size:.78rem;letter-spacing:.32em;font-weight:700;
-    color:var(--coral);margin:0 0 8px;text-transform:uppercase;
+    color:var(--coral-deep);margin:0 0 8px;text-transform:uppercase;
   }
   h1.title{
     margin:0;font-size:2.05rem;font-weight:800;letter-spacing:.01em;
@@ -83,7 +140,7 @@
     font:inherit;font-weight:700;font-size:.86rem;border-radius:10px;padding:9px 14px;cursor:pointer;
     transition:transform .08s ease, background .15s ease;
   }
-  button.tb:hover{background:#FFF1D6;}
+  button.tb:hover{background:var(--surface-hover);}
   button.tb:active{transform:translateY(1px);}
   button.tb.on{background:var(--gold);}
   button.tb:focus-visible,select:focus-visible{outline:3px solid var(--sky);outline-offset:2px;}
@@ -91,32 +148,35 @@
   /* ---------- Teacher panel ---------- */
   details.teacher{
     margin:14px 0 0;border:2px dashed var(--close);border-radius:14px;
-    background:#FFF7EC;overflow:hidden;
+    background:var(--tint-warm);overflow:hidden;
   }
   details.teacher>summary{
     list-style:none;cursor:pointer;padding:14px 18px;font-weight:800;
-    display:flex;align-items:center;gap:10px;color:var(--close);
+    display:flex;align-items:center;gap:10px;color:var(--close-deep);
   }
   details.teacher>summary::-webkit-details-marker{display:none;}
-  .chip{font-size:.7rem;background:var(--close);color:#fff;border-radius:999px;padding:2px 10px;font-weight:700;letter-spacing:.1em;}
+  /* summary 原生可聚焦，但記號已被 list-style:none 拿掉，焦點框不可省 */
+  details.teacher>summary:focus-visible{outline:3px solid var(--sky);outline-offset:2px;border-radius:12px;}
+  .chip{font-size:.7rem;background:var(--close-deep);color:var(--on-accent);border-radius:999px;padding:2px 10px;font-weight:700;letter-spacing:.1em;}
   .tw{font-size:.78rem;color:var(--ink-soft);margin-left:auto;font-weight:600;}
   details.teacher[open] .tw::after{content:"（點此收合）";}
   details.teacher:not([open]) .tw::after{content:"（點此展開教案）";}
   .tbody{padding:4px 18px 20px;}
-  .tbody h3{font-size:1rem;margin:18px 0 8px;color:var(--ink);border-left:5px solid var(--amber);padding-left:10px;}
+  .tbody h3{font-size:1rem;margin:18px 0 8px;color:var(--ink);display:flex;align-items:center;gap:9px;}
+  .tbody h3::before{content:"";flex:none;width:11px;height:11px;border-radius:3px;background:var(--amber);}
   ol.flow{margin:0;padding-left:0;list-style:none;counter-reset:f;}
   ol.flow li{counter-increment:f;position:relative;padding:7px 0 7px 46px;border-bottom:1px solid var(--line);font-size:.92rem;}
   ol.flow li:last-child{border-bottom:none;}
   ol.flow li::before{
     content:counter(f);position:absolute;left:0;top:8px;width:30px;height:30px;
-    background:var(--amber);color:#fff;border-radius:8px;display:grid;place-items:center;font-weight:800;font-size:.9rem;
+    background:var(--amber);color:var(--on-warm);border-radius:8px;display:grid;place-items:center;font-weight:800;font-size:.9rem;
   }
-  ol.flow b{color:var(--coral);}
+  ol.flow b{color:var(--coral-deep);}
   table.sel{width:100%;border-collapse:collapse;font-size:.88rem;margin-top:4px;}
   table.sel th,table.sel td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top;}
-  table.sel th{background:#FBEAD0;font-weight:800;width:38%;}
+  table.sel th{background:var(--tint-sand);font-weight:800;width:38%;}
   .rubric{display:grid;gap:8px;margin-top:4px;}
-  .rubric div{font-size:.9rem;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:#fff;}
+  .rubric div{font-size:.9rem;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);}
   .rubric b{display:inline-block;min-width:5.2em;}
 
   /* ---------- Case context ---------- */
@@ -125,12 +185,12 @@
     padding:18px 20px;position:relative;
   }
   .context .tag{
-    display:inline-block;font-size:.74rem;font-weight:800;letter-spacing:.14em;color:#fff;background:var(--coral);
+    display:inline-block;font-size:.74rem;font-weight:800;letter-spacing:.14em;color:var(--on-accent);background:var(--coral-deep);
     border-radius:999px;padding:3px 12px;margin-bottom:8px;
   }
   .context h2{margin:0 0 6px;font-size:1.3rem;}
   .context p{margin:0;font-size:.96rem;color:var(--ink);}
-  .carenote{margin-top:10px;font-size:.82rem;color:var(--close);background:#FFF2E2;border-left:4px solid var(--close);padding:8px 12px;border-radius:0 8px 8px 0;}
+  .carenote{margin-top:10px;font-size:.82rem;color:var(--close-deep);background:var(--tint-coral);border:1px solid var(--line-coral);padding:8px 12px;border-radius:8px;}
 
   .grouplabel{display:flex;align-items:center;gap:12px;margin:30px 0 10px;}
   .grouplabel .l{font-weight:800;font-size:1.05rem;letter-spacing:.04em;}
@@ -144,51 +204,50 @@
   .step{position:relative;margin:0 0 16px;}
   .medal{
     position:absolute;left:-49px;top:0;width:44px;height:44px;border-radius:12px;
-    color:#fff;font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:1.5rem;
-    display:grid;place-items:center;border:2px solid rgba(0,0,0,.12);
-    box-shadow:0 2px 0 rgba(0,0,0,.12);
+    font-family:var(--font-display);font-weight:700;font-size:1.5rem;
+    display:grid;place-items:center;border:2px solid var(--shadow-soft);
+    box-shadow:0 2px 0 var(--shadow-soft);
   }
   .card{
     background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:14px 16px 16px;
   }
-  .step.fig .card{box-shadow:-6px 0 0 -2px var(--fig);}
-  .step.tespn .card{box-shadow:-6px 0 0 -2px var(--tespn);}
   .chead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
   .chead .cn{font-weight:800;font-size:1.12rem;}
   .chead .en{color:var(--ink-soft);font-weight:700;font-size:.8rem;letter-spacing:.08em;}
-  .seltag{margin-left:auto;font-size:.72rem;font-weight:800;border-radius:999px;padding:3px 11px;color:#3A2A20;}
+  .seltag{margin-left:auto;font-size:.72rem;font-weight:800;border-radius:999px;padding:3px 11px;color:var(--ink);}
   .q{margin:8px 0 10px;font-size:.93rem;color:var(--ink);}
-  .q b{color:var(--coral);}
+  .q b{color:var(--coral-deep);}
   textarea{
     width:100%;min-height:70px;resize:vertical;border:1.5px solid var(--line);border-radius:10px;
-    padding:10px 12px;font:inherit;font-size:.95rem;line-height:1.6;background:#FFFEFB;color:var(--ink);
+    padding:10px 12px;font:inherit;font-size:.95rem;line-height:1.6;background:var(--surface-input);color:var(--ink);
   }
-  textarea:focus-visible{outline:3px solid var(--sky);outline-offset:1px;border-color:var(--sky);}
+  textarea:focus-visible{outline:3px solid var(--sky);outline-offset:1px;border-color:var(--sky-deep);}
   details.ref{margin-top:8px;}
   details.ref summary{
-    list-style:none;cursor:pointer;font-size:.82rem;font-weight:700;color:var(--teal);
+    list-style:none;cursor:pointer;font-size:.82rem;font-weight:700;color:var(--teal-deep);
     display:inline-flex;align-items:center;gap:6px;user-select:none;
   }
   details.ref summary::-webkit-details-marker{display:none;}
+  details.ref summary:focus-visible{outline:3px solid var(--sky);outline-offset:2px;border-radius:6px;}
   details.ref summary::before{content:"▸";transition:transform .15s;}
   details.ref[open] summary::before{transform:rotate(90deg);}
-  .refbody{margin-top:6px;font-size:.9rem;background:#F2F8F3;border:1px solid #CFE6D4;border-radius:10px;padding:10px 12px;color:#2E4F36;}
+  .refbody{margin-top:6px;font-size:.9rem;background:var(--tint-green);border:1px solid var(--line-green);border-radius:10px;padding:10px 12px;color:var(--green-deep);}
   .refempty{color:var(--ink-soft);font-style:italic;}
 
   /* ---------- Reflection ---------- */
   .reflect{margin-top:34px;border:2px solid var(--ink);border-radius:16px;overflow:hidden;background:var(--card);}
-  .reflect .rh{background:var(--deep);color:#fff;padding:12px 18px;font-weight:800;font-size:1.1rem;letter-spacing:.04em;}
+  .reflect .rh{background:var(--deep);color:var(--on-accent);padding:12px 18px;font-weight:800;font-size:1.1rem;letter-spacing:.04em;}
   .rcols{display:grid;grid-template-columns:1fr 1fr;gap:0;}
   .rcol{padding:16px 18px;}
-  .rcol:first-child{border-right:2px solid var(--line);background:#FBF6EC;}
+  .rcol:first-child{border-right:2px solid var(--line);background:var(--tint-cream);}
   .rcol h4{margin:0 0 8px;font-size:.98rem;}
   .rcol h4 .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;vertical-align:middle;}
-  .decide{padding:16px 18px;border-top:2px solid var(--line);background:#FFF7E8;}
-  .decide h4{margin:0 0 8px;font-size:1rem;color:var(--close);}
+  .decide{padding:16px 18px;border-top:2px solid var(--line);background:var(--tint-honey);}
+  .decide h4{margin:0 0 8px;font-size:1rem;color:var(--close-deep);}
   .decide .rq{font-size:.9rem;color:var(--ink-soft);margin:0 0 8px;}
 
   footer.ft{margin-top:34px;font-size:.8rem;color:var(--ink-soft);text-align:center;line-height:1.8;}
-  footer.ft b{color:var(--coral);}
+  footer.ft b{color:var(--coral-deep);}
 
   @media (max-width:640px){
     .wrap{padding:18px 14px 60px;}
@@ -331,21 +390,21 @@
 <script>
 /* ---------------- 八步驟定義（通用引導問句） ---------------- */
 const STEPS = [
-  {k:"F",group:"fig",cn:"情緒覺察",en:"Feelings",sel:"自我覺察",color:"#E25B43",seltagbg:"#FBD9CF",
+  {k:"F",group:"fig",cn:"情緒覺察",en:"Feelings",sel:"自我覺察",sw:"sw-coral",seltagbg:"var(--pale-coral)",
     q:"當事人此刻有什麼<b>感受</b>？他在害怕、生氣或擔心什麼？換成你，又會有什麼感受？"},
-  {k:"I",group:"fig",cn:"界定問題",en:"Identify",sel:"社會覺察",color:"#F0A03B",seltagbg:"#FCE6C6",
+  {k:"I",group:"fig",cn:"界定問題",en:"Identify",sel:"社會覺察",sw:"sw-amber",seltagbg:"var(--pale-amber)",
     q:"他真正面對的<b>問題</b>是什麼？牽涉到哪些人？這些人各自的立場又是什麼？"},
-  {k:"G",group:"fig",cn:"設定目標",en:"Goals",sel:"負責任的決定",color:"#D9A82E",seltagbg:"#F6E7B6",
+  {k:"G",group:"fig",cn:"設定目標",en:"Goals",sel:"負責任的決定",sw:"sw-gold",seltagbg:"var(--pale-gold)",
     q:"他最想<b>達成</b>什麼？這個目標背後，他最在乎的是什麼價值？"},
-  {k:"T",group:"tespn",cn:"想出方法",en:"Think",sel:"自我管理",color:"#5FA463",seltagbg:"#D7EBD9",
+  {k:"T",group:"tespn",cn:"想出方法",en:"Think",sel:"自我管理",sw:"sw-green",seltagbg:"var(--pale-green)",
     q:"先別急著下結論——他至少有哪些<b>選擇</b>？試著想出三種以上。"},
-  {k:"E",group:"tespn",cn:"預想後果",en:"Envision",sel:"負責任的決定",color:"#3F9E8E",seltagbg:"#CFE9E3",
+  {k:"E",group:"tespn",cn:"預想後果",en:"Envision",sel:"負責任的決定",sw:"sw-teal",seltagbg:"var(--pale-teal)",
     q:"每一個選擇，可能帶來什麼<b>好處與代價</b>？分別會影響到誰？"},
-  {k:"S",group:"tespn",cn:"做出選擇",en:"Select",sel:"負責任的決定",color:"#3E8CB5",seltagbg:"#CFE3EF",
+  {k:"S",group:"tespn",cn:"做出選擇",en:"Select",sel:"負責任的決定",sw:"sw-sky",seltagbg:"var(--pale-sky)",
     q:"他最後（或你會）選哪一個？<b>為什麼</b>這個選擇最好？"},
-  {k:"P",group:"tespn",cn:"計畫執行",en:"Plan",sel:"自我管理",color:"#356E9E",seltagbg:"#D0DCEA",
+  {k:"P",group:"tespn",cn:"計畫執行",en:"Plan",sel:"自我管理",sw:"sw-deep",seltagbg:"var(--pale-deep)",
     q:"要怎麼<b>做</b>才可能成功？過程中可能遇到什麼困難？"},
-  {k:"N",group:"tespn",cn:"檢視結果",en:"Notice",sel:"社會覺察",color:"#C9743E",seltagbg:"#F1DBC6",
+  {k:"N",group:"tespn",cn:"檢視結果",en:"Notice",sel:"社會覺察",sw:"sw-close",seltagbg:"var(--pale-close)",
     q:"結果<b>如何</b>？如果重來一次，會不會改變決定？從中學到什麼？"},
 ];
 
@@ -430,7 +489,7 @@ function buildSteps(){
     const wrap=document.createElement("div");
     wrap.className="step "+s.group;
     wrap.innerHTML=`
-      <div class="medal" style="background:${s.color}">${s.k}</div>
+      <div class="medal ${s.sw}">${s.k}</div>
       <div class="card">
         <div class="chead">
           <span class="cn">${s.cn}</span>
@@ -466,7 +525,7 @@ function loadCase(id){
   document.getElementById("ctxTitle").textContent=c.title;
   document.getElementById("ctxBody").textContent=c.body;
   const noteEl=document.getElementById("ctxNote");
-  if(c.note){noteEl.textContent="💡 "+c.note;noteEl.hidden=false;}else{noteEl.hidden=true;}
+  if(c.note){noteEl.textContent=c.note;noteEl.hidden=false;}else{noteEl.hidden=true;}
   document.getElementById("reflectQ").textContent="思考題："+c.reflectQ;
 
   // refill textareas from memory

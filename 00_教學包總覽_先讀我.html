@@ -5,63 +5,162 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>教學包總覽 — FIG-TESPN 融入社會科</title>
 <style>
+  /* ── FIG-TESPN 教學包・共用設計 token ─────────────────────────────
+     8 份檔案共用同一組。所有顏色一律經此宣告，樣式區不再寫死色值。
+     命名採語意角色：
+       --X        純填色，不承載文字（色條、進度條、圓點、分隔）
+       --X-deep   承載文字用：當紙上文字色，或當底色配 --on-accent
+                  （對最深淺底 --tint-sand 皆 ≥ 4.5:1）
+       --on-accent  置於 -deep／--deep 深填色上的文字（白）
+       --on-warm    置於 --amber／--gold 亮填色上的文字（墨）
+     ------------------------------------------------------------- */
+  /* ── FIG-TESPN 教學包・共用設計 token ─────────────────────────────
+     8 份檔案共用同一組。所有顏色一律經此宣告，樣式區不再寫死色值。
+     命名採語意角色：
+       --X        純填色，不承載文字（色條、進度條、圓點、分隔）
+       --X-deep   承載文字用：當紙上文字色，或當底色配 --on-accent
+                  （對最深淺底 --tint-sand 皆 ≥ 4.5:1）
+       --on-accent  置於 -deep／--deep 深填色上的文字（白）
+       --on-warm    置於 --amber／--gold 亮填色上的文字（墨）
+     ------------------------------------------------------------- */
   :root{
-    --paper:#FBF3E2;--card:#FFFDF8;--ink:#3A2A20;--inkSoft:#86705F;--line:#EAD9BD;
-    --coral:#E25B43;--amber:#F0A03B;--gold:#D9A82E;--green:#5FA463;--teal:#3F9E8E;--sky:#3E8CB5;--deep:#356E9E;--close:#C9743E;
+    /* 字體堆疊 */
+    --font-body:"PingFang TC","Heiti TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    --font-display:Georgia,"Times New Roman",serif;
+    --font-num:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+
+    /* 紙張與墨色 */
+    --paper:#FBF3E2;
+    --paper-hi:#FFFCF4;
+    --paper-lo:#FFF6E6;
+    --card:#FFFDF8;
+    --ink:#3A2A20;
+    --ink-soft:#7C6758;
+    --line:#EAD9BD;
+    --on-accent:#FFFFFF;
+    --on-warm:#3A2A20;
+
+    /* 色相・純填色 */
+    --coral:#E25B43; --amber:#F0A03B; --gold:#D9A82E; --green:#5FA463;
+    --teal:#3F9E8E;  --sky:#3E8CB5;   --deep:#356E9E;  --close:#C9743E;
+
+    /* 色相・承載文字用（--deep 原值已達標，無加深版） */
+    --coral-deep:#C5371E; --amber-deep:#9C5C0C;
+    --green-deep:#437646; --teal-deep:#2F766A;  --sky-deep:#327193;
+    --close-deep:#9F592D;
+
+    /* 淺色調底（皆可承載 --ink 與 --ink-soft） */
+    --tint-warm:#FFF7EC;  --tint-sand:#FBEAD0; --tint-cream:#FBF6EC;
+    --tint-note:#FBF1DE;  --tint-coral:#FDF0E9; --tint-green:#E5F1E6;
+    --tint-teal:#EAF5F2;  --tint-sky:#EEF5F8;   --tint-honey:#FFF7E8;
+    --surface-hover:#FFF1D6;
+    --surface-input:#FFFEFB;
+
+    /* 邊框與陰影（陰影帶墨色相，不用純黑） */
+    --line-coral:#F3C9BC; --line-green:#CFE6D4; --line-sky:#BFDDEC;
+    --shadow-soft:rgba(58,42,32,.12);
+    --shadow-firm:rgba(58,42,32,.16);
+
+    /* 步驟徽章的淡色底（承載 --ink） */
+    --pale-coral:#FBD9CF; --pale-amber:#FCE6C6; --pale-gold:#F6E7B6;
+    --pale-green:#D7EBD9; --pale-teal:#CFE9E3;  --pale-sky:#CFE3EF;
+    --pale-deep:#D0DCEA;  --pale-close:#F1DBC6;
+
+    /* 抬頭光暈（--amber 22% / --green 16%） */
+    --bloom-warm:rgba(240,160,59,.22);
   }
+
+  /* 配色對：填色與其文字色永遠成對，避免白字落在亮暖色上（對比皆 ≥4.5:1） */
+  .sw-coral{background:var(--coral-deep);color:var(--on-accent);}
+  .sw-amber{background:var(--amber);     color:var(--on-warm);}
+  .sw-gold {background:var(--gold);      color:var(--on-warm);}
+  .sw-green{background:var(--green-deep);color:var(--on-accent);}
+  .sw-teal {background:var(--teal-deep); color:var(--on-accent);}
+  .sw-sky  {background:var(--sky-deep);  color:var(--on-accent);}
+  .sw-deep {background:var(--deep);      color:var(--on-accent);}
+  .sw-close{background:var(--close-deep);color:var(--on-accent);}
+
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html,body{margin:0;padding:0;overflow-x:clip;}
   body{background:var(--paper);color:var(--ink);
-    font-family:"PingFang TC","Heiti TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    font-family:var(--font-body);
     line-height:1.6;-webkit-font-smoothing:antialiased;}
   .wrap{max-width:900px;margin:0 auto;padding:26px 22px 60px;}
 
   /* header */
   header.hd{position:relative;border:2px solid var(--ink);border-radius:18px;overflow:hidden;
-    background:linear-gradient(180deg,#FFFCF4,#FFF6E6);padding:22px 26px 20px;}
+    background:linear-gradient(180deg,var(--paper-hi),var(--paper-lo));padding:22px 26px 20px;}
   header.hd::before{content:"";position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(circle at 92% -25%,rgba(240,160,59,.22),transparent 42%),
-               radial-gradient(circle at 3% 130%,rgba(95,164,99,.16),transparent 46%);}
-  .eyebrow{font-size:.74rem;letter-spacing:.3em;font-weight:700;color:var(--coral);margin:0 0 8px;text-transform:uppercase;}
+    background:radial-gradient(circle at 92% -25%,var(--bloom-warm),transparent 42%);}
+  .eyebrow{font-size:.74rem;letter-spacing:.3em;font-weight:700;color:var(--coral-deep);margin:0 0 8px;text-transform:uppercase;}
   h1{margin:0;font-size:1.7rem;font-weight:800;}
-  h1 small{display:block;font-size:.92rem;font-weight:700;color:var(--inkSoft);margin-top:6px;}
+  h1 small{display:block;font-size:.92rem;font-weight:700;color:var(--ink-soft);margin-top:6px;}
   .intro{margin:12px 0 0;font-size:.92rem;color:var(--ink);max-width:64ch;}
-  .source{margin:8px 0 0;font-size:.8rem;color:var(--inkSoft);}
+  .source{margin:8px 0 0;font-size:.8rem;color:var(--ink-soft);}
 
   h2.sec{font-size:1.05rem;margin:26px 0 4px;display:flex;align-items:center;gap:10px;}
-  h2.sec .b{width:1.7rem;height:1.7rem;border-radius:9px;color:#fff;display:grid;place-items:center;font-family:Georgia,serif;font-weight:700;font-size:1rem;}
-  h2.sec .sub{font-size:.78rem;color:var(--inkSoft);font-weight:600;}
+  h2.sec .b{flex:none;width:1.7rem;height:1.7rem;border-radius:9px;display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:1rem;}
+  h2.sec .sub{font-size:.78rem;color:var(--ink-soft);font-weight:600;}
 
   /* scenario quick guide */
-  .scen{margin-top:14px;border:2px dashed var(--close);border-radius:14px;background:#FFF7EC;padding:14px 18px;}
-  .scen h3{margin:0 0 10px;font-size:1rem;color:var(--close);}
+  .scen{margin-top:14px;border:2px dashed var(--close);border-radius:14px;background:var(--tint-warm);padding:14px 18px;}
+  .scen h3{margin:0 0 10px;font-size:1rem;color:var(--close-deep);}
   .srow{display:flex;gap:12px;align-items:flex-start;padding:7px 0;border-top:1px solid var(--line);}
   .srow:first-of-type{border-top:none;}
   .stag{flex:none;width:8.5rem;font-weight:800;font-size:.86rem;}
-  .stag .ic{margin-right:5px;}
   .spath{font-size:.86rem;}
-  .spath b{color:var(--coral);}
+  .spath b{color:var(--coral-deep);}
 
   /* file cards */
   .file{border:2px solid var(--ink);border-radius:13px;background:var(--card);padding:13px 16px;margin-top:11px;}
   .ftop{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
   .fname{font-weight:800;font-size:1.02rem;}
-  .fmt{font-family:Georgia,serif;font-size:.7rem;font-weight:700;color:#fff;border-radius:5px;padding:1px 7px;letter-spacing:.04em;}
-  .fmt.html{background:var(--teal);} .fmt.pptx{background:var(--coral);}
-  .fpath{font-size:.74rem;color:var(--inkSoft);font-family:ui-monospace,monospace;margin-top:2px;word-break:break-all;}
+  .fmt{font-family:var(--font-display);font-size:.7rem;font-weight:700;border-radius:5px;padding:1px 7px;letter-spacing:.04em;}
+  .fmt.html{background:var(--teal-deep);color:var(--on-accent);}
+  .fmt.pptx{background:var(--coral-deep);color:var(--on-accent);}
+  .fpath{font-size:.74rem;color:var(--ink-soft);font-family:var(--font-num);margin-top:2px;word-break:break-all;}
   .frow{display:grid;grid-template-columns:5.5rem 1fr;gap:6px 10px;margin-top:8px;font-size:.88rem;}
-  .frow .k{font-weight:800;color:var(--close);}
-  .open{display:inline-block;margin-top:8px;font-size:.8rem;font-weight:700;color:var(--sky);text-decoration:none;}
+  .frow .k{font-weight:800;color:var(--close-deep);}
+  .open{display:inline-block;margin-top:8px;font-size:.8rem;font-weight:700;color:var(--sky-deep);text-decoration:none;}
+  .open:hover{text-decoration:underline;}
+  /* 鍵盤焦點：沿用骰子／鷹架的既有樣式 */
+  .open:focus-visible{outline:3px solid var(--sky);outline-offset:2px;border-radius:5px;}
   .open::before{content:"↗ ";}
 
   /* rationale */
-  .why{margin-top:24px;border:2px solid var(--ink);border-radius:14px;background:#FBF6EC;padding:14px 18px;}
+  .why{margin-top:24px;border:2px solid var(--ink);border-radius:14px;background:var(--tint-cream);padding:14px 18px;}
   .why h3{margin:0 0 6px;font-size:1rem;}
   .why p{margin:4px 0;font-size:.88rem;}
-  .why b{color:var(--coral);}
+  .why b{color:var(--coral-deep);}
 
-  footer.ft{margin-top:22px;font-size:.78rem;color:var(--inkSoft);text-align:center;line-height:1.9;}
-  footer.ft b{color:var(--coral);}
+  footer.ft{margin-top:22px;font-size:.78rem;color:var(--ink-soft);text-align:center;line-height:1.9;}
+  footer.ft b{color:var(--coral-deep);}
+
+
+  /* ── 手機（≤600px）：本頁原本沒有任何斷點 ──
+     .stag 固定 8.5rem 會把 .spath 壓到 88px（約 6 個中文字一行），
+     情境列高度衝到 176px。窄螢幕一律改直式堆疊。 */
+  @media (max-width:600px){
+    .wrap{padding:18px 14px 40px;}
+    header.hd{padding:18px 16px 16px;}
+    h1{font-size:1.35rem;}
+    h1 small{font-size:.85rem;}
+    .intro,.source{font-size:.86rem;}
+
+    /* 情境列：標籤在上、路徑在下 */
+    .srow{flex-direction:column;gap:3px;padding:9px 0;}
+    .stag{width:auto;}
+
+    /* 區段標題：說明文字換到次行，與標題文字齊左 */
+    h2.sec{flex-wrap:wrap;gap:8px;}
+    h2.sec .sub{flex:1 0 100%;padding-left:calc(1.7rem + 8px);}
+
+    /* 檔案卡：欄名改為上方標籤 */
+    .file{padding:12px 13px;}
+    .frow{grid-template-columns:1fr;gap:0;}
+    .frow .k{margin-top:7px;}
+    .frow .k:first-of-type{margin-top:0;}
+  }
 
   @media print{
     body{background:#fff;}
@@ -92,21 +191,21 @@
   <div class="scen">
     <h3>先看這裡：三種情境，該拿哪幾份？</h3>
     <div class="srow">
-      <div class="stag"><span class="ic">🎒</span>我要上一堂課</div>
+      <div class="stag">我要上一堂課</div>
       <div class="spath"><b>① 骰子遊戲</b>暖身體驗 → <b>② 多案例鷹架</b>分析歷史 → <b>③ 教師提問單</b>帶討論（教具三件套）</div>
     </div>
     <div class="srow">
-      <div class="stag"><span class="ic">🎤</span>我要在研習分享</div>
+      <div class="stag">我要在研習分享</div>
       <div class="spath"><b>⑥ 精簡版含講者備註</b>（投影）+ <b>⑧ 流程小抄</b>（控時）+ <b>⑦ 講稿</b>（順稿），時間長就改用 <b>④ 完整版</b></div>
     </div>
     <div class="srow">
-      <div class="stag"><span class="ic">🤝</span>我要交接 / 初次了解</div>
+      <div class="stag">我要交接 / 初次了解</div>
       <div class="spath">先讀<b>本頁總覽</b> → 看一遍 <b>④ 完整版簡報</b>掌握全貌 → 再打開三件教具實際操作一次</div>
     </div>
   </div>
 
   <!-- A. 課堂教具 -->
-  <h2 class="sec"><span class="b" style="background:var(--green)">A</span>課堂教具 <span class="sub">直接上課、發給學生用（HTML，瀏覽器開啟，可離線、可列印）</span></h2>
+  <h2 class="sec"><span class="b sw-green">A</span>課堂教具 <span class="sub">直接上課、發給學生用（HTML，瀏覽器開啟，可離線、可列印）</span></h2>
 
   <div class="file">
     <div class="ftop"><span class="fname">① 多案例思考鷹架</span><span class="fmt html">HTML</span></div>
@@ -139,7 +238,7 @@
   </div>
 
   <!-- B. 工作坊簡報 -->
-  <h2 class="sec"><span class="b" style="background:var(--coral)">B</span>工作坊簡報 <span class="sub">對外分享、研習用（PowerPoint，可自由編輯）</span></h2>
+  <h2 class="sec"><span class="b sw-coral">B</span>工作坊簡報 <span class="sub">對外分享、研習用（PowerPoint，可自由編輯）</span></h2>
 
   <div class="file">
     <div class="ftop"><span class="fname">④ 完整版簡報（13 頁）</span><span class="fmt pptx">PPTX</span></div>
@@ -172,7 +271,7 @@
   </div>
 
   <!-- C. 講者輔助 -->
-  <h2 class="sec"><span class="b" style="background:var(--sky)">C</span>講者輔助 <span class="sub">上台順稿、控時用（HTML，可列印／手機看）</span></h2>
+  <h2 class="sec"><span class="b sw-sky">C</span>講者輔助 <span class="sub">上台順稿、控時用（HTML，可列印／手機看）</span></h2>
 
   <div class="file">
     <div class="ftop"><span class="fname">⑦ 工作坊講稿（對應 8 頁）</span><span class="fmt html">HTML</span></div>
